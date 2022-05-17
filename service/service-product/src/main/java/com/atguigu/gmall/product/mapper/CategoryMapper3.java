@@ -3,7 +3,7 @@ import com.atguigu.gmall.model.product.BaseCategory3;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 public interface CategoryMapper3  extends BaseMapper<BaseCategory3> {
 
 }
