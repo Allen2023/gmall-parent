@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.service.impl;
 
+
 import com.atguigu.gmall.model.product.BaseCategory1;
 import com.atguigu.gmall.model.product.BaseCategory2;
 import com.atguigu.gmall.model.product.BaseCategory3;
@@ -7,7 +8,6 @@ import com.atguigu.gmall.product.mapper.CategoryMapper1;
 import com.atguigu.gmall.product.mapper.CategoryMapper2;
 import com.atguigu.gmall.product.mapper.CategoryMapper3;
 import com.atguigu.gmall.product.service.CategoryService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +27,9 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryMapper3 categoryMapper3;
 
     @Override
-    public List<BaseCategory1> getAllCategory1() {
-        List<BaseCategory1> category1s = categoryMapper1.selectList(null);
-        return category1s;
+    public List<com.atguigu.gmall.model.product.BaseCategory1> getAllCategory1() {
+        List<BaseCategory1> baseCategory1List = categoryMapper1.selectList(null);
+        return baseCategory1List;
     }
 
 
