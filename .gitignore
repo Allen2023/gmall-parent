@@ -1,4 +1,5 @@
-### Maven template
+#声明了git提交的时候不要的东西
+#maven项目只要这两个。pom.xml 和 src  .gitignore
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -11,3 +12,4 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
+.idea

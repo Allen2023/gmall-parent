@@ -11,7 +11,7 @@
         <module name="common-util" />
         <module name="model" />
         <module name="service-util" />
-        <module name="service" />
+        <module name="service-product" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -26,6 +26,7 @@
       <module name="model" options="-parameters" />
       <module name="server-gateway" options="-parameters" />
       <module name="service" options="-parameters" />
+      <module name="service-product" options="-parameters" />
       <module name="service-util" options="-parameters" />
     </option>
   </component>
