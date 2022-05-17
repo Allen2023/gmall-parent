@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryMapper3 categoryMapper3;
 
     @Override
-    public List<com.atguigu.gmall.model.product.BaseCategory1> getAllCategory1() {
+    public List<BaseCategory1> getAllCategory1() {
         List<BaseCategory1> baseCategory1List = categoryMapper1.selectList(null);
         return baseCategory1List;
     }
