@@ -2,6 +2,7 @@ package com.atguigu.gmall.product.controller;
 
 
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.model.product.BaseAttrInfo;
 import com.atguigu.gmall.model.product.BaseCategory1;
 import com.atguigu.gmall.model.product.BaseCategory2;
 import com.atguigu.gmall.model.product.BaseCategory3;
@@ -53,4 +54,21 @@ public class CategoryController {
         List<BaseCategory3> category3s = categoryService.getCategory3Byc2(category2Id);
         return Result.ok(category3s);
     }
+
+    /**
+     * 根据分类id获取平台属性
+     * @param category1Id
+     * @param category2Id
+     * @param category3Id
+     * @return
+     */
+    @GetMapping("/attrInfoList/{category1Id}/{category2Id}/{category3Id}")
+    public Result getCategory3(@PathVariable(value = "category1Id") Long category1Id,
+                               @PathVariable(value = "category2Id") Long category2Id,
+                               @PathVariable(value = "category3Id") Long category3Id) {
+        List<BaseAttrInfo> attrInfoList = categoryService.getAttrInfoList(category1Id,category2Id,category3Id);
+        return Result.ok(attrInfoList);
+
+    }
+
 }

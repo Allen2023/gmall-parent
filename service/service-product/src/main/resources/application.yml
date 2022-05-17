@@ -8,6 +8,10 @@ spring:
     password: root
     driver-class-name: com.mysql.jdbc.Driver
 
+mybatis-plus:
+  #xml文件位置
+  mapper-locations: classpath:com/atguigu/gmall/product/mapper/**/*.xml
+
 
     #mybatis-plus
     #mybatis-plus:
