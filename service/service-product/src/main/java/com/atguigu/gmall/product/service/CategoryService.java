@@ -15,6 +15,5 @@ public interface CategoryService {
 
     List<BaseCategory3> getCategory3Byc2(Long category2Id);
 
-    List<BaseAttrInfo> getAttrInfoList(Long category1Id, Long category2Id, Long category3Id);
 
 }
