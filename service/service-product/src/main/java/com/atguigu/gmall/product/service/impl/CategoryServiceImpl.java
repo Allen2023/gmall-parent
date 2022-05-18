@@ -28,8 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryMapper3 categoryMapper3;
 
-    @Autowired
-    BaseAttrInfoMapper baseAttrInfoMapper;
 
     @Override
     public List<BaseCategory1> getAllCategory1() {
@@ -53,8 +51,4 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
-    @Override
-    public List<BaseAttrInfo> getAttrInfoList(Long category1Id, Long category2Id, Long category3Id) {
-        return baseAttrInfoMapper.selectBaseAttrInfoList(category1Id, category2Id, category3Id);
-    }
 }

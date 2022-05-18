@@ -55,20 +55,6 @@ public class CategoryController {
         return Result.ok(category3s);
     }
 
-    /**
-     * 根据分类id获取平台属性
-     * @param category1Id
-     * @param category2Id
-     * @param category3Id
-     * @return
-     */
-    @GetMapping("/attrInfoList/{category1Id}/{category2Id}/{category3Id}")
-    public Result getCategory3(@PathVariable(value = "category1Id") Long category1Id,
-                               @PathVariable(value = "category2Id") Long category2Id,
-                               @PathVariable(value = "category3Id") Long category3Id) {
-        List<BaseAttrInfo> attrInfoList = categoryService.getAttrInfoList(category1Id,category2Id,category3Id);
-        return Result.ok(attrInfoList);
 
-    }
 
 }
