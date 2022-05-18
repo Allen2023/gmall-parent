@@ -20,6 +20,8 @@
             <id property="id" column="attr_value_id"></id>
         </collection>
     </resultMap>
+
+
     <!--id:表示方法名-->
     <select id="selectBaseAttrInfoList" resultMap="baseAttrInfoMap">
         <!-- SELECT
@@ -67,5 +69,7 @@
         </where>
         order by bai.category_level,bai.id
     </select>
+
+
 
 </mapper>

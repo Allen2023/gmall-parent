@@ -8,5 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface BaseAttrInfoMapper extends BaseMapper<BaseAttrInfo> {
-    List<BaseAttrInfo> selectBaseAttrInfoList(@Param("category1Id") Long category1Id, @Param("category2Id") Long category2Id, @Param("category3Id") Long category3Id);
+    List<BaseAttrInfo> selectBaseAttrInfoList( Long category1Id,  Long category2Id,  Long category3Id);
+
+
 }
