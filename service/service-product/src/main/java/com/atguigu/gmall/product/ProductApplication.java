@@ -1,12 +1,11 @@
 package com.atguigu.gmall.product;
 
-import com.atguigu.gmall.common.config.MybatisPlusConfig;
-import org.mybatis.spring.annotation.MapperScan;
+import com.atguigu.gmall.common.annotation.EnableMinio;
+import com.atguigu.gmall.common.minio.minioConfig.MinioAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 
 import org.springframework.context.annotation.Import;
-
 
 
 
@@ -16,3 +15,5 @@ public class ProductApplication {
         SpringApplication.run(ProductApplication.class, args);
     }
 }
+
+

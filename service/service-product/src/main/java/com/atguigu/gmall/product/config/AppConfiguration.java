@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.config;
 
+import com.atguigu.gmall.common.annotation.EnableMinio;
 import com.atguigu.gmall.common.config.MybatisPlusConfig;
 import com.atguigu.gmall.product.annotation.ProductConfig;
 import io.minio.MinioClient;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Import;
  */
 
 @ProductConfig
+@EnableMinio//开启Minio
 @Configuration
 public class AppConfiguration {
 
