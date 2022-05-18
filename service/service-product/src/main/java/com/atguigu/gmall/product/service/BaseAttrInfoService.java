@@ -23,6 +23,10 @@ public interface BaseAttrInfoService extends IService<BaseAttrInfo> {
     List<BaseAttrInfo> getAttrInfoList(@Param("category1Id") Long category1Id, @Param("category2Id") Long category2Id, @Param("category3Id") Long category3Id);
 
     void saveAttrInfoAndValue(@Param("baseAttrInfo") BaseAttrInfo baseAttrInfo);
+    void updateAttrInfoAndValue(@Param("baseAttrInfo") BaseAttrInfo baseAttrInfo);
 
     List<BaseAttrValue> findAttrValueById(Long attrId);
+
+    void saveOrUpdateAttrInfoAndValue(BaseAttrInfo baseAttrInfo);
+
 }

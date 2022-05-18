@@ -46,7 +46,8 @@ public class BaseAttrController {
      */
     @PostMapping("/saveAttrInfo")
     public Result getCategory3(@RequestBody BaseAttrInfo baseAttrInfo) {
-        baseAttrService.saveAttrInfoAndValue(baseAttrInfo);
+//        baseAttrService.saveAttrInfoAndValue(baseAttrInfo);
+        baseAttrService.saveOrUpdateAttrInfoAndValue(baseAttrInfo);
         return Result.ok();
     }
 
