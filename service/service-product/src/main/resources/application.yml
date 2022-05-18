@@ -8,10 +8,12 @@ spring:
     password: root
     driver-class-name: com.mysql.jdbc.Driver
 
-#mybatis-plus:
-#  #xml文件位置
-#  mapper-locations: classpath:com/atguigu/gmall/product/mapper/**/*.xml
-
+app:
+  minio:
+    endpoint: http://192.168.253.88:9000
+    accesskey: admin
+    secretkey: admin123456
+    bucket: gmall
 
     #mybatis-plus
     #mybatis-plus:

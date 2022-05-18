@@ -8,6 +8,7 @@ import com.atguigu.gmall.product.service.BaseTrademarkService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Author: xsz
@@ -75,6 +76,7 @@ public class BaseTrademarkController {
 
     /**
      * 根据id删除某个品牌
+     *
      * @param id
      * @return
      */

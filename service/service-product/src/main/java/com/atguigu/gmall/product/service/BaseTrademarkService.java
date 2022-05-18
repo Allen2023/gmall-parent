@@ -3,6 +3,7 @@ package com.atguigu.gmall.product.service;
 
 import com.atguigu.gmall.model.product.BaseTrademark;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
 * @author 86185
@@ -10,5 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-05-18 11:19:50
 */
 public interface BaseTrademarkService extends IService<BaseTrademark> {
+
 
 }
