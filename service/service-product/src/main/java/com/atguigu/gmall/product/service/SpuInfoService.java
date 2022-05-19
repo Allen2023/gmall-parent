@@ -18,5 +18,5 @@ public interface SpuInfoService extends IService<SpuInfo> {
     Page<SpuInfo> getSpuInfoPage(Page<SpuInfo> page, Long category3Id);
 
 
-
+    void saveSpuInfo(SpuInfo spuInfo);
 }

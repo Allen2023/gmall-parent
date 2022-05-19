@@ -52,4 +52,15 @@ public class SpuController {
 
         return Result.ok(baseSaleAttrList);
     }
+
+    /**
+     * 添加SPU
+     * @param spuInfo
+     * @return
+     */
+    @PostMapping("/saveSpuInfo")
+    public Result saveSpuInfo(@RequestBody SpuInfo spuInfo) {
+        spuInfoService.saveSpuInfo(spuInfo);
+        return Result.ok();
+    }
 }

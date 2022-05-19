@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @Author: xsz
  * @Description: TODO
@@ -36,6 +38,13 @@ public class BaseTrademarkController {
         Page<BaseTrademark> page = new Page<>(pageNum, pageSize);
         Page<BaseTrademark> result = baseTrademarkService.page(page);
         return Result.ok(result);
+    }
+
+
+    @GetMapping("/baseTrademark/getTrademarkList")
+    public Result getTrademarkList() {
+        List<BaseTrademark> baseTrademarkList = baseTrademarkService.getTrademarkList();
+        return Result.ok(baseTrademarkList);
     }
 
     /**
