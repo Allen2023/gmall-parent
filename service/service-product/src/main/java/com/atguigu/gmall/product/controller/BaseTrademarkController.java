@@ -33,7 +33,6 @@ public class BaseTrademarkController {
     public Result getBaseTrademarkPage(@PathVariable Long pageNum,
                                        @PathVariable Long pageSize) {
 
-
         Page<BaseTrademark> page = new Page<>(pageNum, pageSize);
         Page<BaseTrademark> result = baseTrademarkService.page(page);
         return Result.ok(result);

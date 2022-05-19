@@ -25,7 +25,6 @@ public class fileController {
 
     @PostMapping("/fileUpload")
     public Result fileUpload(MultipartFile file) throws Exception {
-
         String path = ossService.uploadFile(file);
         return Result.ok(path);
     }
