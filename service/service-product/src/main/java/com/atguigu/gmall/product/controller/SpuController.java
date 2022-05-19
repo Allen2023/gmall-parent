@@ -21,7 +21,7 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/19 9:49
  */
-@Api(description="spu接口")
+@Api(tags = "spu接口", description = "SpuController")
 @RequestMapping("/admin/product")
 @EnableTransactionManagement
 @RestController
@@ -53,6 +53,7 @@ public class SpuController {
 
     /**
      * 获取销售属性
+     *
      * @return
      */
     @ApiOperation("获取销售属性")

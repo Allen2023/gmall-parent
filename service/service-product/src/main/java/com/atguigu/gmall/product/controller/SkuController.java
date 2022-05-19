@@ -20,7 +20,7 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/19 11:18
  */
-@Api(description="商品属性SKU管理接口")
+@Api(tags = "商品属性SKU管理接口", description = "SkuController")
 @RequestMapping("/admin/product")
 @RestController
 public class SkuController {
@@ -46,7 +46,6 @@ public class SkuController {
     }
 
 
-
     /**
      * 商品属性
      * Sku分页
@@ -65,6 +64,7 @@ public class SkuController {
 
     /**
      * 添加Sku
+     *
      * @param skuInfo
      * @return
      */
@@ -76,7 +76,8 @@ public class SkuController {
     }
 
     /**
-     *上架Sku
+     * 上架Sku
+     *
      * @return
      */
     @ApiOperation(value = "上架Sku")
@@ -87,7 +88,8 @@ public class SkuController {
     }
 
     /**
-     *下架Sku
+     * 下架Sku
+     *
      * @return
      */
     @ApiOperation(value = "下架Sku")

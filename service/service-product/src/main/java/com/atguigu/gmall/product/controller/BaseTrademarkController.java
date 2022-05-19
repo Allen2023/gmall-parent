@@ -22,7 +22,7 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/18 10:54
  */
-@Api(description = "品牌列表接口")
+@Api(tags = "品牌列表接口", description = "BaseTrademarkController")
 @EnableTransactionManagement
 @RequestMapping("/admin/product")
 @RestController

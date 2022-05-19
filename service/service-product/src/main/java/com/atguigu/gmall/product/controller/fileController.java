@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @DateTime: 2022/5/18 20:49
  */
 @Slf4j
-@Api(description = "文件上传接口")
+@Api(tags = "文件上传接口", description = "fileController")
 @EnableTransactionManagement
 @RequestMapping("/admin/product")
 @RestController
