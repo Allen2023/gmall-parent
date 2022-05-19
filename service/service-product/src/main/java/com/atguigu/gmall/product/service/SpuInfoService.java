@@ -3,6 +3,7 @@ package com.atguigu.gmall.product.service;
 
 import com.atguigu.gmall.model.product.BaseSaleAttr;
 import com.atguigu.gmall.model.product.SpuInfo;
+import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,4 +20,7 @@ public interface SpuInfoService extends IService<SpuInfo> {
 
 
     void saveSpuInfo(SpuInfo spuInfo);
+
+    List<SpuSaleAttr> getSpuSaleAttrList(Long spuId);
+
 }

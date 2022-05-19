@@ -4,6 +4,7 @@ import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.product.mapper.SpuImageMapper;
 import com.atguigu.gmall.product.mapper.SpuSaleAttrMapper;
 import com.atguigu.gmall.product.mapper.SpuSaleAttrValueMapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -12,6 +13,7 @@ import com.atguigu.gmall.product.service.SpuInfoService;
 import com.atguigu.gmall.product.mapper.SpuInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
         return spuInfoPage;
     }
 
+    @Transactional
     @Override
     public void saveSpuInfo(SpuInfo spuInfo) {
         //1.添加spuInfo信息
@@ -53,7 +56,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
             for (SpuImage spuImage : spuImageList) {
                 Long id = spuInfo.getId();
                 spuImage.setSpuId(id);
-        //2.添加SpuImage信息
+                //2.添加SpuImage信息
                 spuImageMapper.insert(spuImage);
             }
         }
@@ -62,7 +65,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
             for (SpuSaleAttr spuSaleAttr : spuSaleAttrList) {
                 Long id = spuInfo.getId();
                 spuSaleAttr.setSpuId(id);
-         //3.添加SpuSaleAttr信息
+                //3.添加SpuSaleAttr信息
                 spuSaleAttrMapper.insert(spuSaleAttr);
                 List<SpuSaleAttrValue> spuSaleAttrValueList = spuSaleAttr.getSpuSaleAttrValueList();
                 if (spuSaleAttrValueList.size() > 0) {
@@ -79,6 +82,18 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
         }
 
 
+    }
+
+    @Override
+    public List<SpuSaleAttr> getSpuSaleAttrList(Long spuId) {
+        //1.查询SpuSaleAttr
+        List<SpuSaleAttr> spuSaleAttrList = spuSaleAttrMapper.selectList(new LambdaQueryWrapper<SpuSaleAttr>().eq(SpuSaleAttr::getSpuId, spuId));
+        //2.查询SpuSaleAttrValue
+        List<SpuSaleAttrValue> spuSaleAttrValueList = spuSaleAttrValueMapper.selectList(new LambdaQueryWrapper<SpuSaleAttrValue>().eq(SpuSaleAttrValue::getSpuId, spuId));
+        for (SpuSaleAttr spuSaleAttr : spuSaleAttrList) {
+            spuSaleAttr.setSpuSaleAttrValueList(spuSaleAttrValueList);
+        }
+        return spuSaleAttrList;
     }
 
 
