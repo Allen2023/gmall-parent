@@ -20,7 +20,7 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/19 11:18
  */
-@Api(description="商品属性SKU管理")
+@Api(description="商品属性SKU管理接口")
 @RequestMapping("/admin/product")
 @RestController
 public class SkuController {
