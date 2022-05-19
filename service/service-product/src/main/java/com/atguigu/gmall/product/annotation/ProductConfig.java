@@ -2,6 +2,7 @@ package com.atguigu.gmall.product.annotation;
 
 import com.atguigu.gmall.common.config.MybatisPlusConfig;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @MapperScan(basePackages = "com.atguigu.gmall.product.mapper")
-@Import(MybatisPlusConfig.class)
+@ComponentScan(basePackages = "com.atguigu.gmall.common.config")
 public @interface ProductConfig {
 }

@@ -7,6 +7,8 @@ import com.atguigu.gmall.product.service.SkuImageService;
 import com.atguigu.gmall.product.service.SkuInfoService;
 import com.atguigu.gmall.product.service.SpuImageService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/19 11:18
  */
+@Api(description="商品属性SKU管理")
 @RequestMapping("/admin/product")
 @RestController
 public class SkuController {
@@ -35,11 +38,14 @@ public class SkuController {
      * @param spuId
      * @return
      */
+    @ApiOperation(value = "根据id查询spuImage")
     @GetMapping("/spuImageList/{spuId}")
     public Result getSpuImageList(@PathVariable("spuId") Long spuId) {
         List<SpuImage> spuImageList = spuImageService.getSpuImageList(spuId);
         return Result.ok(spuImageList);
     }
+
+
 
     /**
      * 商品属性
@@ -49,6 +55,7 @@ public class SkuController {
      * @param pageSize
      * @return
      */
+    @ApiOperation(value = "商品属性 Sku分页")
     @GetMapping("/list/{pageNum}/{pageSize}")
     public Result getSkuPage(@PathVariable("pageNum") Long pageNum, @PathVariable("pageSize") Long pageSize) {
         Page<SkuInfo> page = new Page<>(pageNum, pageSize);
@@ -56,12 +63,12 @@ public class SkuController {
         return Result.ok(skuInfoPage);
     }
 
-
     /**
      * 添加Sku
      * @param skuInfo
      * @return
      */
+    @ApiOperation(value = "添加Sku")
     @PostMapping("/saveSkuInfo")
     public Result saveSkuInfo(@RequestBody SkuInfo skuInfo) {
         skuInfoService.saveSkuInfo(skuInfo);
@@ -72,6 +79,7 @@ public class SkuController {
      *上架Sku
      * @return
      */
+    @ApiOperation(value = "上架Sku")
     @GetMapping("/onSale/{skuId}")
     public Result onSale(@PathVariable("skuId") Long skuId) {
         skuInfoService.onSale(skuId);
@@ -82,6 +90,7 @@ public class SkuController {
      *下架Sku
      * @return
      */
+    @ApiOperation(value = "下架Sku")
     @GetMapping("/cancelSale/{skuId}")
     public Result cancelSale(@PathVariable("skuId") Long skuId) {
         skuInfoService.cancelSale(skuId);
