@@ -7,8 +7,11 @@ import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.atguigu.gmall.product.service.BaseSaleAttrService;
 import com.atguigu.gmall.product.service.SpuInfoService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +21,9 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/19 9:49
  */
+@Api(description="spu接口")
 @RequestMapping("/admin/product")
+@EnableTransactionManagement
 @RestController
 public class SpuController {
 
@@ -36,7 +41,7 @@ public class SpuController {
      * @param category3Id
      * @return
      */
-    //admin/product/1/10?category3Id=2
+    @ApiOperation("获取spu分页列表")
     @GetMapping("/{pageNum}/{pageSize}")
     public Result getSpuPage(@PathVariable("pageNum") Long pageNum, @PathVariable("pageSize") Long pageSize,
                              @RequestParam("category3Id") Long category3Id) {
@@ -46,7 +51,11 @@ public class SpuController {
         return Result.ok(result);
     }
 
-
+    /**
+     * 获取销售属性
+     * @return
+     */
+    @ApiOperation("获取销售属性")
     @GetMapping("/baseSaleAttrList")
     public Result getBaseSaleAttrList() {
         List<BaseSaleAttr> baseSaleAttrList = baseAttrService.getBaseSaleAttrList();
@@ -55,11 +64,12 @@ public class SpuController {
     }
 
     /**
-     * 添加SPU
+     * 添加spu
      *
      * @param spuInfo
      * @return
      */
+    @ApiOperation("添加spu")
     @PostMapping("/saveSpuInfo")
     public Result saveSpuInfo(@RequestBody SpuInfo spuInfo) {
         spuInfoService.saveSpuInfo(spuInfo);
@@ -67,11 +77,12 @@ public class SpuController {
     }
 
     /**
-     * 获取spu信息
+     * 获取品牌属性
      *
      * @param spuId
      * @return
      */
+    @ApiOperation("获取品牌属性")
     @GetMapping("/spuSaleAttrList/{spuId}")
     public Result getSpuSaleAttrList(@PathVariable("spuId") Long spuId) {
         List<SpuSaleAttr> spuSaleAttrList = spuInfoService.getSpuSaleAttrList(spuId);

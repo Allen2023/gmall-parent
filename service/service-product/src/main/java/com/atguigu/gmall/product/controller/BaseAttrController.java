@@ -17,7 +17,7 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/18 8:56
  */
-@Api(description = "基本信息管理接口")
+@Api(description = "平台属性接口")
 @EnableTransactionManagement //开启事务
 @RequestMapping("/admin/product")
 @RestController

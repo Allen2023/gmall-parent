@@ -7,6 +7,7 @@ import io.minio.MinioClient;
 import io.minio.PutObjectOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -26,6 +27,7 @@ public class OssServiceImpl implements OssService {
 
     @Autowired
     MinioProperties minioProperties;
+
 
 
     @Override
