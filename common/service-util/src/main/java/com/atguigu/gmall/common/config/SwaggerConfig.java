@@ -31,10 +31,10 @@ public class SwaggerConfig {
     @Bean
     public Docket ProductApiConfig() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("尚品汇商城后台")
+                .groupName("adminApi")
                 .apiInfo(ProductApiInfo("尚品汇商城后台 APIs", "1.0"))
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.atguigu.gmall.product.controller"))
+                //.apis(RequestHandlerSelectors.basePackage("com.atguigu.gmall.product.controller"))
                 .paths(Predicates.and(PathSelectors.regex("/admin/.*")))
                 .build();
     }
@@ -52,4 +52,3 @@ public class SwaggerConfig {
                 .build();
     }
 }
-
