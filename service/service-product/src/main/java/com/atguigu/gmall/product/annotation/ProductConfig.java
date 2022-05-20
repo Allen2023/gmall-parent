@@ -14,6 +14,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @MapperScan(basePackages = "com.atguigu.gmall.product.mapper")
-@ComponentScan(basePackages = "com.atguigu.gmall.common.config")
+//@ComponentScan(basePackages = "com.atguigu.gmall.common.config")
 public @interface ProductConfig {
 }
