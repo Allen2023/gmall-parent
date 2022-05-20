@@ -84,14 +84,17 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
 
     @Override
     public List<SpuSaleAttr> getSpuSaleAttrList(Long spuId) {
-        //1.查询SpuSaleAttr
+       /* //1.查询SpuSaleAttr
         List<SpuSaleAttr> spuSaleAttrList = spuSaleAttrMapper.selectList(new LambdaQueryWrapper<SpuSaleAttr>().eq(SpuSaleAttr::getSpuId, spuId));
         //2.查询SpuSaleAttrValue
         List<SpuSaleAttrValue> spuSaleAttrValueList = spuSaleAttrValueMapper.selectList(new LambdaQueryWrapper<SpuSaleAttrValue>().eq(SpuSaleAttrValue::getSpuId, spuId));
         for (SpuSaleAttr spuSaleAttr : spuSaleAttrList) {
             spuSaleAttr.setSpuSaleAttrValueList(spuSaleAttrValueList);
         }
-        return spuSaleAttrList;
+        return spuSaleAttrList;*/
+
+        List<SpuSaleAttr> spuSaleAttrs = spuSaleAttrValueMapper.getSpuSaleAttrAndValue(spuId);
+        return spuSaleAttrs;
     }
 
 
