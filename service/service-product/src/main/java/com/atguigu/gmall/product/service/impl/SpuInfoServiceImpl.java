@@ -51,10 +51,11 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
     public void saveSpuInfo(SpuInfo spuInfo) {
         //1.添加spuInfo信息
         spuInfoMapper.insert(spuInfo);
+        Long id = spuInfo.getId();
         List<SpuImage> spuImageList = spuInfo.getSpuImageList();
         if (spuImageList.size() > 0) {
             for (SpuImage spuImage : spuImageList) {
-                Long id = spuInfo.getId();
+
                 spuImage.setSpuId(id);
                 //2.添加SpuImage信息
                 spuImageMapper.insert(spuImage);
@@ -63,17 +64,14 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
         List<SpuSaleAttr> spuSaleAttrList = spuInfo.getSpuSaleAttrList();
         if (spuSaleAttrList.size() > 0) {
             for (SpuSaleAttr spuSaleAttr : spuSaleAttrList) {
-                Long id = spuInfo.getId();
                 spuSaleAttr.setSpuId(id);
                 //3.添加SpuSaleAttr信息
                 spuSaleAttrMapper.insert(spuSaleAttr);
                 List<SpuSaleAttrValue> spuSaleAttrValueList = spuSaleAttr.getSpuSaleAttrValueList();
                 if (spuSaleAttrValueList.size() > 0) {
                     for (SpuSaleAttrValue spuSaleAttrValue : spuSaleAttrValueList) {
-                        String saleAttrName = spuSaleAttr.getSaleAttrName();
-                        spuSaleAttrValue.setSaleAttrName(saleAttrName);
-                        Long spuId = spuInfo.getId();
-                        spuSaleAttrValue.setSpuId(spuId);
+                        spuSaleAttrValue.setSaleAttrName(spuSaleAttr.getSaleAttrName());
+                        spuSaleAttrValue.setSpuId(id);
                         //4.添加SpuSaleAttrValue信息
                         spuSaleAttrValueMapper.insert(spuSaleAttrValue);
                     }

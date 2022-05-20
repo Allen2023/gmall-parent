@@ -9,7 +9,6 @@ import com.atguigu.gmall.product.service.SpuInfoService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
@@ -78,12 +77,12 @@ public class SpuController {
     }
 
     /**
-     * 获取品牌属性
+     * 根据spuId获取销售属性
      *
      * @param spuId
      * @return
      */
-    @ApiOperation("获取品牌属性")
+    @ApiOperation("根据spuId获取销售属性")
     @GetMapping("/spuSaleAttrList/{spuId}")
     public Result getSpuSaleAttrList(@PathVariable("spuId") Long spuId) {
         List<SpuSaleAttr> spuSaleAttrList = spuInfoService.getSpuSaleAttrList(spuId);
