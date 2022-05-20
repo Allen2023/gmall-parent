@@ -83,7 +83,7 @@ public class SkuController {
     @ApiOperation(value = "上架Sku")
     @GetMapping("/onSale/{skuId}")
     public Result onSale(@PathVariable("skuId") Long skuId) {
-        skuInfoService.onSale(skuId);
+        skuInfoService.upOrDownSku(skuId,1);
         return Result.ok();
     }
 
@@ -95,7 +95,7 @@ public class SkuController {
     @ApiOperation(value = "下架Sku")
     @GetMapping("/cancelSale/{skuId}")
     public Result cancelSale(@PathVariable("skuId") Long skuId) {
-        skuInfoService.cancelSale(skuId);
+        skuInfoService.upOrDownSku(skuId,0);
         return Result.ok();
     }
 }

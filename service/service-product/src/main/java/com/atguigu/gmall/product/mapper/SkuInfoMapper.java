@@ -12,6 +12,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface SkuInfoMapper extends BaseMapper<SkuInfo> {
 
+    void upOrDownSku(Long skuId, int status);
+
 }
 
 

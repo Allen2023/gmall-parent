@@ -64,18 +64,10 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     }
 
     @Override
-    public void onSale(Long skuId) {
-        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
-        skuInfo.setIsSale(1);
-        skuInfoMapper.updateById(skuInfo);
+    public void upOrDownSku(Long skuId, int status) {
+        skuInfoMapper.upOrDownSku(skuId,status);
     }
 
-    @Override
-    public void cancelSale(Long skuId) {
-        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
-        skuInfo.setIsSale(0);
-        skuInfoMapper.updateById(skuInfo);
-    }
 
 }
 
