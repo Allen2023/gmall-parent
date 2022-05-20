@@ -19,12 +19,12 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/19 11:18
  */
-@Api(tags = "商品属性SKU管理接口", description = "SkuController")
+@Api(tags = "商品属性SKU管理接口")
 @RequestMapping("/admin/product")
 @RestController
 public class SkuController {
 
-    //http://api.gmall.com/admin/product/spuImageList/{spuId}
+
     @Autowired
     SpuImageService spuImageService;
 
