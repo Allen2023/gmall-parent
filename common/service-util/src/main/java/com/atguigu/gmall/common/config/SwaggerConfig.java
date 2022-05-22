@@ -43,7 +43,7 @@ public class SwaggerConfig {
      * 访问地址：http://ip:port/swagger-ui.html
      * @return
      */
-    private ApiInfo ProductApiInfo(String title, String version) {
+    private ApiInfo ProductApiInfo(String title, String version){
         return new ApiInfoBuilder()
                 .title(title)
                 .description("本文档描述了后台管理系统微服务接口定义")
