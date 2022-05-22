@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * @Description: TODO
  * @DateTime: 2022/5/22 22:16
  */
-@EnableFeignClients(basePackages = "com.atguigu.gmall.web.feign")
+@EnableFeignClients(basePackages = "com.atguigu.gmall.feign")
 @Configuration
 public class AppFeignConfig {
 

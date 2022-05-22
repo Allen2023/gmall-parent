@@ -1,10 +1,12 @@
 package com.atguigu.gmall.product.rpc;
 
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.to.CategoryAndChildTo;
 import com.atguigu.gmall.product.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,4 +37,16 @@ public class CategoryRpcController {
         List<CategoryAndChildTo> categorys = categoryService.getAllCategoryWithChilds();
         return Result.ok(categorys);
     }
+
+    /**
+     * 获取一个sku的分类层级信息
+     *
+     * @return
+     */
+    @GetMapping("/category/view/{skuId}")
+    public Result<BaseCategoryView> getSkuCategoryView(@PathVariable("skuId") Long skuId) {
+        BaseCategoryView view = categoryService.getSkuCategoryView(skuId);
+        return Result.ok(view);
+    }
+
 }

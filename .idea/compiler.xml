@@ -10,9 +10,11 @@
         <module name="server-gateway" />
         <module name="web-all" />
         <module name="common-util" />
-        <module name="model" />
-        <module name="service-util" />
+        <module name="service-feign-client" />
         <module name="service-product" />
+        <module name="model" />
+        <module name="service-item" />
+        <module name="service-util" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -27,6 +29,8 @@
       <module name="model" options="-parameters" />
       <module name="server-gateway" options="-parameters" />
       <module name="service" options="-parameters" />
+      <module name="service-feign-client" options="-parameters" />
+      <module name="service-item" options="-parameters" />
       <module name="service-product" options="-parameters" />
       <module name="service-util" options="-parameters" />
       <module name="web-all" options="-parameters" />

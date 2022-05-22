@@ -1,10 +1,7 @@
 package com.atguigu.gmall.product.service.impl;
 
 
-import com.atguigu.gmall.model.product.BaseAttrInfo;
-import com.atguigu.gmall.model.product.BaseCategory1;
-import com.atguigu.gmall.model.product.BaseCategory2;
-import com.atguigu.gmall.model.product.BaseCategory3;
+import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.model.to.CategoryAndChildTo;
 import com.atguigu.gmall.product.mapper.BaseAttrInfoMapper;
 import com.atguigu.gmall.product.mapper.CategoryMapper1;
@@ -58,4 +55,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
+    @Override
+    public BaseCategoryView getSkuCategoryView(Long skuId) {
+
+        return categoryMapper1.getSkuCategoryView(skuId);
+    }
 }

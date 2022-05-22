@@ -24,4 +24,11 @@
                  left join base_category2 c2 on c1.id = c2.category1_id
                  left join base_category3 c3 on c2.id = c3.category2_id
     </select>
+
+    <select id="getSkuCategoryView" resultType="com.atguigu.gmall.model.product.BaseCategoryView">
+        select cv.*
+        from sku_info sku
+                 left join base_category_view cv on cv.category3_id = sku.category3_id
+        where sku.id = #{skuId};
+    </select>
 </mapper>

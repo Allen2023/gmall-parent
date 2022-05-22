@@ -3,10 +3,7 @@ package com.atguigu.gmall.product.service;
 
 import java.util.List;
 
-import com.atguigu.gmall.model.product.BaseAttrInfo;
-import com.atguigu.gmall.model.product.BaseCategory1;
-import com.atguigu.gmall.model.product.BaseCategory2;
-import com.atguigu.gmall.model.product.BaseCategory3;
+import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.model.to.CategoryAndChildTo;
 
 public interface CategoryService {
@@ -21,4 +18,5 @@ public interface CategoryService {
     List<CategoryAndChildTo> getAllCategoryWithChilds();
 
 
+    BaseCategoryView getSkuCategoryView(Long skuId);
 }
