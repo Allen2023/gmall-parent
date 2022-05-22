@@ -1,9 +1,16 @@
 package com.atguigu.gmall.web.controller;
 
+import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.model.to.CategoryAndChildTo;
+import com.atguigu.gmall.web.feign.ProductFeignClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 /**
  * @Author: xsz
@@ -13,10 +20,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 @Controller
 public class IndexController {
-//    classpath:/templates/index.html
+    @Autowired
+    ProductFeignClient productFeignClient;
+
+    //    classpath:/templates/index.html
     @GetMapping("/")
-    public String indexPage(){
-        log.info("首页");
+    public String indexPage(Model model) {
+//        log.info("首页");
+        Result<List<CategoryAndChildTo>> result = productFeignClient.getAllCategoryWithChilds();
+        if (result.isOk()) {
+            //如果远程调用正常
+            //拿到远程调用返回的数据
+            List<CategoryAndChildTo> data = result.getData();
+            model.addAttribute("list",data);
+        }
         return "index/index";
     }
+
+
 }

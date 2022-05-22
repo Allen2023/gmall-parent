@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--namespace 定义接口的全路径-->
+<mapper namespace="com.atguigu.gmall.product.mapper.CategoryMapper1">
+
+
+    <resultMap id="CategoryAndChildMap" type="com.atguigu.gmall.model.to.CategoryAndChildTo">
+        <id property="categoryId" column="id"></id>
+        <result property="categoryName" column="name"></result>
+        <collection property="categoryChild" ofType="com.atguigu.gmall.model.to.CategoryAndChildTo">
+            <id property="categoryId" column="c2Id"></id>
+            <result property="categoryName" column="c2name"></result>
+            <collection property="categoryChild" ofType="com.atguigu.gmall.model.to.CategoryAndChildTo">
+                <id property="categoryId" column="c3Id"></id>
+                <result property="categoryName" column="c3name"></result>
+            </collection>
+        </collection>
+    </resultMap>
+    <!--    mybatis允许递归写法，完成无限极分类的封装-->
+
+    <select id="getAllCategoryWithChilds" resultMap="CategoryAndChildMap">
+        SELECT c1.*, c2.id c2Id, c2.`name` c2name, c3.id c3Id, c3.`name` c3name
+        from base_category1 c1
+                 left join base_category2 c2 on c1.id = c2.category1_id
+                 left join base_category3 c3 on c2.id = c3.category2_id
+    </select>
+</mapper>

@@ -1,9 +1,14 @@
 package com.atguigu.gmall.product.rpc;
 
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.model.to.CategoryAndChildTo;
+import com.atguigu.gmall.product.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Author: xsz
@@ -17,12 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rpc/inner/product")
 public class CategoryRpcController {
 
+    @Autowired
+    CategoryService categoryService;
+
     /**
      * 获取系统的所有分类以及子分类
+     *
      * @return
      */
     @GetMapping("/categorys")
-    public Result getAllCategoryWithChilds(){
-        return Result.ok();
+    public Result<List<CategoryAndChildTo>> getAllCategoryWithChilds() {
+        List<CategoryAndChildTo> categorys = categoryService.getAllCategoryWithChilds();
+        return Result.ok(categorys);
     }
 }

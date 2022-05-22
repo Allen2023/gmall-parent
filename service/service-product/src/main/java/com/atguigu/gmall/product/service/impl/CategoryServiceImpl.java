@@ -5,6 +5,7 @@ import com.atguigu.gmall.model.product.BaseAttrInfo;
 import com.atguigu.gmall.model.product.BaseCategory1;
 import com.atguigu.gmall.model.product.BaseCategory2;
 import com.atguigu.gmall.model.product.BaseCategory3;
+import com.atguigu.gmall.model.to.CategoryAndChildTo;
 import com.atguigu.gmall.product.mapper.BaseAttrInfoMapper;
 import com.atguigu.gmall.product.mapper.CategoryMapper1;
 import com.atguigu.gmall.product.mapper.CategoryMapper2;
@@ -48,6 +49,12 @@ public class CategoryServiceImpl implements CategoryService {
         QueryWrapper<BaseCategory3> wrapper = new QueryWrapper<BaseCategory3>().eq("category2_id", category2Id);
         List<BaseCategory3> baseCategory3List = categoryMapper3.selectList(wrapper);
         return baseCategory3List;
+    }
+
+    @Override
+    public List<CategoryAndChildTo> getAllCategoryWithChilds() {
+        return categoryMapper1.getAllCategoryWithChilds();
+
     }
 
 
