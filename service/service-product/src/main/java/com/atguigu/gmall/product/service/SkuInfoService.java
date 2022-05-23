@@ -2,7 +2,12 @@ package com.atguigu.gmall.product.service;
 
 
 import com.atguigu.gmall.model.product.SkuInfo;
+import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author 86185
@@ -15,4 +20,10 @@ public interface SkuInfoService extends IService<SkuInfo> {
 
 
     void upOrDownSku(Long skuId, int status);
+
+    BigDecimal getSkuPrice(Long skuId);
+
+    List<SpuSaleAttr> getSkudeSpuSaleAttrAndValue(Long skuId);
+
+
 }

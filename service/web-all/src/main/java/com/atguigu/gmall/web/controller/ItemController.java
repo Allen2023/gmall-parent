@@ -30,26 +30,31 @@ public class ItemController {
     public String itemPage(@PathVariable("skuId") Long skuId, Model model) {
         //log.info("商品详情：{}", skuId);
         //RPC查询数据
-       Result<SkuDetailTo> detail = itemFeignClient.getSkuDetial(skuId);
+       Result<SkuDetailTo> detail = itemFeignClient.getSkuDetail(skuId);
        if (detail.isOk()){
-           SkuDetailTo data = detail.getData();
+           SkuDetailTo detailData = detail.getData();
            //1.当前sku所在分类的完整信息
            //category1Id、category1Name
            //category2Id、category2Name
            //category3Id、category3Name
-
-
+           model.addAttribute("categoryView",detailData.getCategoryView());
            //2、当前sku基本信息
            //   skuId、skuName、skuDefaultImg、skuImageList
+           model.addAttribute("skuInfo",detailData.getSkuInfo());
 
            //3、sku的价格
+           model.addAttribute("price",detailData.getPrice());
+
+
            //${spuSaleAttrList}; 定义的所有版本
-
            //4、sku的spu所有销售属性集合；
-           //${valuesSkuJson}; 所有实际存在的sku组合。可切换的组合
+           model.addAttribute("spuSaleAttrList",detailData.getSpuSaleAttrList());
 
-           // {“118|120”:”49”,”119|120”:”50”}
+
+           //${valuesSkuJson}; 所有实际存在的sku组合。可切换的组合
+           // {“118|120”:”49”,”119|120”:”50” }
            //5、当前spu可用的所有sku销售属性组合
+           model.addAttribute("valuesSkuJson",detailData.getValuesSkuJson());
        }
 
 

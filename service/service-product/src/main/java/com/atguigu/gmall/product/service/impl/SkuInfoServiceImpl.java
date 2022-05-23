@@ -9,7 +9,9 @@ import com.atguigu.gmall.product.service.SkuInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 86185
@@ -30,6 +32,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
 
     @Autowired
     SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+
+    @Autowired
+    SpuSaleAttrMapper spuSaleAttrMapper;
 
 
     @Override
@@ -65,8 +70,21 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
 
     @Override
     public void upOrDownSku(Long skuId, int status) {
-        skuInfoMapper.upOrDownSku(skuId,status);
+        skuInfoMapper.upOrDownSku(skuId, status);
     }
+
+    @Override
+    public BigDecimal getSkuPrice(Long skuId) {
+        return skuInfoMapper.selectById(skuId).getPrice();
+
+    }
+
+    @Override
+    public List<SpuSaleAttr> getSkudeSpuSaleAttrAndValue(Long skuId) {
+        return spuSaleAttrMapper.getSkudeSpuSaleAttrAndValue(skuId);
+
+    }
+
 
 
 }

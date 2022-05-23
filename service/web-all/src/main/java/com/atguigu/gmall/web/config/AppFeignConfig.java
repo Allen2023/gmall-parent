@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @EnableFeignClients(basePackages = "com.atguigu.gmall.feign")
 @Configuration
-public class AppFeignConfig {
+public class AppFeignConfig{
 
 }

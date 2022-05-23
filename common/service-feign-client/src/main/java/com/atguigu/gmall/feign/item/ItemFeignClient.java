@@ -1,6 +1,7 @@
 package com.atguigu.gmall.feign.item;
 
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.model.product.SkuInfo;
 import com.atguigu.gmall.model.to.SkuDetailTo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,6 @@ public interface ItemFeignClient {
      * @return
      */
     @GetMapping("/sku/detail/{skuId}")
-     Result<SkuDetailTo> getSkuDetial(@PathVariable("skuId") Long skuId);
+     Result<SkuDetailTo> getSkuDetail(@PathVariable("skuId") Long skuId);
 
 }

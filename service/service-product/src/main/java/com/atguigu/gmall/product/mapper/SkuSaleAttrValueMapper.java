@@ -2,7 +2,10 @@ package com.atguigu.gmall.product.mapper;
 
 
 import com.atguigu.gmall.model.product.SkuSaleAttrValue;
+import com.atguigu.gmall.product.dto.ValueJsonDto;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
 * @author 86185
@@ -12,6 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface SkuSaleAttrValueMapper extends BaseMapper<SkuSaleAttrValue> {
 
+    List<ValueJsonDto> getSkuValueJson(Long skuId);
 }
 
 

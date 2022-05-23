@@ -4,6 +4,8 @@ package com.atguigu.gmall.product.mapper;
 import com.atguigu.gmall.model.product.SkuInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.Map;
+
 /**
 * @author 86185
 * @description 针对表【sku_info(库存单元表)】的数据库操作Mapper
@@ -13,6 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface SkuInfoMapper extends BaseMapper<SkuInfo> {
 
     void upOrDownSku(Long skuId, int status);
+
 
 }
 

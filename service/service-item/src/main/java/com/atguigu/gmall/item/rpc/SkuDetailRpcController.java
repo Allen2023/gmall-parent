@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/22 23:36
  */
-@Controller
+@RestController
 @RequestMapping("/rpc/inner/item")
 public class SkuDetailRpcController {
 
@@ -30,7 +31,7 @@ public class SkuDetailRpcController {
      * @return
      */
     @GetMapping("/sku/detail/{skuId}")
-    public Result<SkuDetailTo> getSkuDetial(@PathVariable("skuId") Long skuId) {
+    public Result<SkuDetailTo> getSkuDetail(@PathVariable("skuId") Long skuId) {
         SkuDetailTo skuDetial = skuDetailService.getSkuDetial(skuId);
         return Result.ok(skuDetial);
     }
