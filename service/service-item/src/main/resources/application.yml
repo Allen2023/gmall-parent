@@ -4,3 +4,10 @@ spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
+app:
+  threadpool:
+    core-pool-size: 16
+    maximum-pool-size: 32
+    keep-alive-time: 1 #以min为单位
+    queue-size: 1000  #系统的稳定峰值，队列一大就会导致OOM
+    #控制了资源

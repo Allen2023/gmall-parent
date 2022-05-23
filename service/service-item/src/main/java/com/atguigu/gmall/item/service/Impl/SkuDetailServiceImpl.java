@@ -44,7 +44,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         if (skuCategoryView.isOk()){
             skuDetailTo.setCategoryView(skuCategoryView.getData());
         }
-        //2、查Sku信息
+        //2、查Sku信息 查价格
         Result<SkuInfo> skuInfo = productFeignClient.getSkuInfo(skuId);
         if (skuInfo.isOk()){
             skuDetailTo.setSkuInfo(skuInfo.getData());
