@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @Author: xsz
@@ -26,7 +27,8 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
     ProductFeignClient productFeignClient;
 
-
+    @Autowired
+    ThreadPoolExecutor corePool;
     //商品详情服务：
     //查询sku详情得做这么多式
     //1、查分类

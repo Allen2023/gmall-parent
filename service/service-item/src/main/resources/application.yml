@@ -6,8 +6,8 @@ spring:
 
 app:
   threadpool:
-    core-pool-size: 16
-    maximum-pool-size: 32
+    core-pool-size: 8
+    maximum-pool-size: 16
     keep-alive-time: 1 #以min为单位
     queue-size: 1000  #系统的稳定峰值，队列一大就会导致OOM
     #控制了资源
