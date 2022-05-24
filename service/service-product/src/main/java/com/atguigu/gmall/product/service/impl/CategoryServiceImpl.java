@@ -1,14 +1,17 @@
 package com.atguigu.gmall.product.service.impl;
 
 
+import com.atguigu.gmall.common.constants.RedisConst;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.model.to.CategoryAndChildTo;
 import com.atguigu.gmall.product.mapper.BaseAttrInfoMapper;
 import com.atguigu.gmall.product.mapper.CategoryMapper1;
 import com.atguigu.gmall.product.mapper.CategoryMapper2;
 import com.atguigu.gmall.product.mapper.CategoryMapper3;
+import com.atguigu.gmall.product.service.CatchService;
 import com.atguigu.gmall.product.service.CategoryService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryMapper3 categoryMapper3;
+
+    @Autowired
+    CatchService catchService;
 
 
     @Override
@@ -50,8 +56,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryAndChildTo> getAllCategoryWithChilds() {
-        return categoryMapper1.getAllCategoryWithChilds();
-
+        //1.查询缓存
+        List<CategoryAndChildTo> catchData = catchService.getCacheData(RedisConst.CATEGORY_CACHE_KEY, new TypeReference<List<CategoryAndChildTo>>() {
+        });
+        if (catchData == null) {
+            //2.缓存没有值查询数据库
+            List<CategoryAndChildTo> childs = categoryMapper1.getAllCategoryWithChilds();
+            //3.将数据放入缓存
+            catchService.saveCatchData(RedisConst.CATEGORY_CACHE_KEY,childs);
+            return childs;
+        } else {
+            return catchData;
+        }
     }
 
 
