@@ -26,4 +26,6 @@ public interface SkuInfoService extends IService<SkuInfo> {
     List<SpuSaleAttr> getSkudeSpuSaleAttrAndValue(Long skuId);
 
 
+    List<Long> getAllSkuIds();
+
 }

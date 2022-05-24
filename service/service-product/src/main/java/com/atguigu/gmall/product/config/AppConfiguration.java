@@ -3,6 +3,7 @@ package com.atguigu.gmall.product.config;
 import com.atguigu.gmall.common.annotation.*;
 import com.atguigu.gmall.product.annotation.ProductConfig;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 /**
@@ -18,8 +19,10 @@ import org.springframework.context.annotation.Configuration;
 @EnableSwaggerApi //开启Swagger
 @ProductConfig //开启mapper扫描
 @EnableMinio//开启Minio
+@EnableScheduling
 @Configuration
 public class AppConfiguration {
+
 
 
 }

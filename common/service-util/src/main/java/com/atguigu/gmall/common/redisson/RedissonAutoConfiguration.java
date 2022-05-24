@@ -5,12 +5,14 @@ import org.redisson.Redisson;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 /**
  * @Author: xsz
@@ -20,6 +22,10 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureAfter(RedisAutoConfiguration.class)//必须在redis自动配置之后再进行
 @Configuration
 public class RedissonAutoConfiguration {
+
+    @Autowired
+    List<BloomTask> bloomTask;
+
     @Bean
     public RedissonClient redissonClient(RedisProperties redisProperties) {
         // 默认连接地址 127.0.0.1:6379
@@ -32,13 +38,39 @@ public class RedissonAutoConfiguration {
     }
 
     @Bean
-    public RBloomFilter<Long> skuBloom(RedissonClient redissonClient) {
-        RBloomFilter<Long> bloomFilter = redissonClient.getBloomFilter(RedisConst.BLOOM_SKU_ID);
+    public RBloomFilter<Object> skuBloom(RedissonClient redissonClient) {
+        RBloomFilter<Object> bloomFilter = redissonClient.getBloomFilter(RedisConst.BLOOM_SKU_ID);
         if (bloomFilter.isExists()) {
-            return bloomFilter;
+            return bloomFilter;//存在布隆直接返回
         } else {
+            //如果不存在则初始化
             bloomFilter.tryInit(500000, 0.0000001);
+            //准备数据
+            for (BloomTask task : bloomTask) {
+                if (task instanceof SkuBloomTask){
+                    //只运行skuBloom的bloom任务
+                    task.initData(bloomFilter);
+                }
+            }
         }
         return bloomFilter;
     }
+
+ /*   @Bean
+    public RBloomFilter<Long> orderBloom(RedissonClient redissonClient) {
+        RBloomFilter<Long> bloomFilter = redissonClient.getBloomFilter(RedisConst.BLOOM_SKU_ID);
+        if (bloomFilter.isExists()) {
+            return bloomFilter;//存在布隆直接返回
+        } else {
+            //如果不存在则初始化
+            bloomFilter.tryInit(500000, 0.0000001);
+            //准备数据
+            for (BloomTask task : bloomTask) {
+                if (task instanceof OrderBloomTask){
+                    task.initData();
+                }
+            }
+        }
+        return bloomFilter;
+    }*/
 }

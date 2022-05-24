@@ -85,6 +85,11 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
 
     }
 
+    @Override
+    public List<Long> getAllSkuIds() {
+
+        return skuInfoMapper.getSkuIds();
+    }
 
 
 }
