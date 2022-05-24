@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -38,36 +39,53 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     //5、查所有销售属性组合
     //6、查实际sku组合
     //7、查介绍(不用管)
+
     @Override
     public SkuDetailTo getSkuDetial(Long skuId) {
         SkuDetailTo skuDetailTo = new SkuDetailTo();
-        //1、查分类
-        Result<BaseCategoryView> skuCategoryView = productFeignClient.getSkuCategoryView(skuId);
-        if (skuCategoryView.isOk()){
-            skuDetailTo.setCategoryView(skuCategoryView.getData());
-        }
-        //2、查Sku信息 查价格
-        Result<SkuInfo> skuInfo = productFeignClient.getSkuInfo(skuId);
-        if (skuInfo.isOk()){
-            skuDetailTo.setSkuInfo(skuInfo.getData());
-        }
-        //3.查询sku价格
-        Result<BigDecimal> skuPrice = productFeignClient.getSkuPrice(skuId);
-        if (skuPrice.isOk()){
-            skuDetailTo.setPrice(skuPrice.getData());
-        }
-        //4、查所有销售属性组合
-        Result<List<SpuSaleAttr>> skudeSpuSaleAttrAndValue = productFeignClient.getSkudeSpuSaleAttrAndValue(skuId);
-        if (skudeSpuSaleAttrAndValue.isOk()){
-            skuDetailTo.setSpuSaleAttrList(skudeSpuSaleAttrAndValue.getData());
-        }
+        //异步 编排: 编组(管理)+排列组合(运行)
+        CompletableFuture<Void> categoryTask = CompletableFuture.runAsync(() -> {
+            //1、查分类
+            Result<BaseCategoryView> skuCategoryView = productFeignClient.getSkuCategoryView(skuId);
+            if (skuCategoryView.isOk()) {
+                skuDetailTo.setCategoryView(skuCategoryView.getData());
+            }
+        }, corePool);
 
-        //5、查实际sku组合
-        Result<Map<String, String>> skuValueJson = productFeignClient.getSkuValueJson(skuId);
-        if(skuValueJson.isOk()){
-            Map<String, String> jsonData = skuValueJson.getData();
-            skuDetailTo.setValuesSkuJson(JSONs.toStr(jsonData));
-        }
+        CompletableFuture<Void> SkuTask = CompletableFuture.runAsync(() -> {
+            //2、查Sku信息 照片
+            Result<SkuInfo> skuInfo = productFeignClient.getSkuInfo(skuId);
+            if (skuInfo.isOk()) {
+                skuDetailTo.setSkuInfo(skuInfo.getData());
+            }
+        }, corePool);
+
+        CompletableFuture<Void> PriceTask = CompletableFuture.runAsync(() -> {
+            //3.查询sku价格
+            Result<BigDecimal> skuPrice = productFeignClient.getSkuPrice(skuId);
+            if (skuPrice.isOk()) {
+                skuDetailTo.setPrice(skuPrice.getData());
+            }
+        }, corePool);
+        CompletableFuture<Void> SpuSaleAttrTask = CompletableFuture.runAsync(() -> {
+            //4、查所有销售属性组合
+            Result<List<SpuSaleAttr>> skudeSpuSaleAttrAndValue = productFeignClient.getSkudeSpuSaleAttrAndValue(skuId);
+            if (skudeSpuSaleAttrAndValue.isOk()){
+                skuDetailTo.setSpuSaleAttrList(skudeSpuSaleAttrAndValue.getData());
+            }
+        }, corePool);
+        CompletableFuture<Void> valueJsonTask = CompletableFuture.runAsync(() -> {
+            //5、查实际sku组合
+            Result<Map<String, String>> skuValueJson = productFeignClient.getSkuValueJson(skuId);
+            if(skuValueJson.isOk()){
+                Map<String, String> jsonData = skuValueJson.getData();
+                skuDetailTo.setValuesSkuJson(JSONs.toStr(jsonData));
+            }
+        }, corePool);
+
+        //allOf 返回的 CompletableFuture 总任务结束再往下
+        CompletableFuture.allOf(categoryTask, SkuTask, PriceTask, SpuSaleAttrTask, valueJsonTask).join();
+
         return skuDetailTo;
     }
 }
