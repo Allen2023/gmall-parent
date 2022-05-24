@@ -3,6 +3,9 @@ server:
 spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  redis:
+    host: 192.168.253.88
+    password: 825119
 
 app:
   threadpool:

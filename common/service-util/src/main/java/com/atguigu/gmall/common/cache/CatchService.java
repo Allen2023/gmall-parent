@@ -1,4 +1,4 @@
-package com.atguigu.gmall.product.service;
+package com.atguigu.gmall.common.cache;
 
 import com.atguigu.gmall.model.to.CategoryAndChildTo;
 import com.fasterxml.jackson.core.type.TypeReference;

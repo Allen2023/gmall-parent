@@ -1,8 +1,8 @@
-package com.atguigu.gmall.product.service.impl;
+package com.atguigu.gmall.common.cache.impl;
 
 import com.atguigu.gmall.common.util.JSONs;
 import com.atguigu.gmall.model.to.CategoryAndChildTo;
-import com.atguigu.gmall.product.service.CatchService;
+import com.atguigu.gmall.common.cache.CatchService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

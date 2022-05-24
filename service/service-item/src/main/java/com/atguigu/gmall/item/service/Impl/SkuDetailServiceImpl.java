@@ -40,8 +40,17 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     //6、查实际sku组合
     //7、查介绍(不用管)
 
+    /**
+     * 缓存查询
+     * @param skuId
+     * @return
+     */
     @Override
     public SkuDetailTo getSkuDetial(Long skuId) {
+
+        return null;
+    }
+    public SkuDetailTo getSkuDetialFromDb(Long skuId) {
         SkuDetailTo skuDetailTo = new SkuDetailTo();
         //异步 编排: 编组(管理)+排列组合(运行)
         CompletableFuture<Void> categoryTask = CompletableFuture.runAsync(() -> {
@@ -88,4 +97,6 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
         return skuDetailTo;
     }
+
+
 }
