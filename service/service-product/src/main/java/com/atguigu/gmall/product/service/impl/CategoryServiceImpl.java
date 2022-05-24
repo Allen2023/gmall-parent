@@ -57,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryAndChildTo> getAllCategoryWithChilds() {
         //1.查询缓存
-        List<CategoryAndChildTo> catchData = catchService.getCacheData(RedisConst.CATEGORY_CACHE_KEY, new TypeReference<List<CategoryAndChildTo>>() {
+        Object catchData = catchService.getCacheData(RedisConst.CATEGORY_CACHE_KEY, new TypeReference<List<CategoryAndChildTo>>() {
         });
         if (catchData == null) {
             //2.缓存没有值查询数据库
@@ -66,14 +66,13 @@ public class CategoryServiceImpl implements CategoryService {
             catchService.saveCatchData(RedisConst.CATEGORY_CACHE_KEY,childs);
             return childs;
         } else {
-            return catchData;
+            return (List<CategoryAndChildTo>) catchData;
         }
     }
 
 
     @Override
     public BaseCategoryView getSkuCategoryView(Long skuId) {
-
         return categoryMapper1.getSkuCategoryView(skuId);
     }
 }

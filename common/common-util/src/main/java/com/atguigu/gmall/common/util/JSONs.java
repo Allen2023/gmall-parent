@@ -42,4 +42,16 @@ public class JSONs {
         }
         return t;
     }
+
+    public static <T extends Object> T nullInstance(TypeReference<T> typeReference) {
+        String json = "[]";
+        T t = null;
+
+        try {
+            t = objectMapper.readValue(json, typeReference);
+        } catch (JsonProcessingException e) {
+            log.error("空实例异常", typeReference);
+        }
+        return t;
+    }
 }

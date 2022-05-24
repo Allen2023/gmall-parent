@@ -23,5 +23,10 @@ public interface CatchService {
      */
    <T> T getCacheData(String categoryCacheKey, TypeReference<T> typeReference);
 
+    /**
+     * 保存缓存数据
+     * @param categoryCacheKey
+     * @param data
+     */
     void saveCatchData(String categoryCacheKey, Object data);
 }

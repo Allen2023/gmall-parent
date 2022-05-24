@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: xsz
@@ -46,33 +47,44 @@ public class CatchServiceImpl implements CatchService {
     /**
      * 获取缓存数据
      *
-     * @param categoryCacheKey
+     * @param key
      * @param typeReference
      * @param <T>
      * @return
      */
     @Override
-    public <T> T getCacheData(String categoryCacheKey, TypeReference<T> typeReference) {
-        //获取redis指定key的数据
-        String json = redisTemplate.opsForValue().get(categoryCacheKey);
-        //判断json是否为null
+    public <T extends Object> T getCacheData(String key, TypeReference<T> typeReference) {
+        //1.获取redis指定key的数据
+        String json = redisTemplate.opsForValue().get(key);
+        //2.判断json是否为null  不为null代表至少查过一次
         if (!StringUtils.isEmpty(json)) {
-            //将json数据转化为指定的对象
+            //3.如果查询的为空值 则返回null
+            if ("null".equals(json)) {
+                T t = JSONs.nullInstance(typeReference);
+                return t;
+            }
+            //4.将json数据转化为指定的对象
             T t = JSONs.strToObject(json, typeReference);
             return t;
         }
+        //缓存中没数据,该数据一次都没有查过
         return null;
     }
 
     /**
      * 保存缓存数据
      *
-     * @param categoryCacheKey
+     * @param key
      * @param data
      */
     @Override
-    public void saveCatchData(String categoryCacheKey, Object data) {
-
-        redisTemplate.opsForValue().set(categoryCacheKey, JSONs.toStr(data));
+    public void saveCatchData(String key, Object data) {
+        if (data == null) {
+            //数据库是 null long timeout, TimeUnit unit //被动型检查数据，缓存的短一点
+            redisTemplate.opsForValue().set(key, "null", 30, TimeUnit.MINUTES);
+        } else {
+            //数据库有。 有的数据缓存的久一点
+            redisTemplate.opsForValue().set(key, JSONs.toStr(data), 3, TimeUnit.DAYS);
+        }
     }
 }
