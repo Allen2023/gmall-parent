@@ -1,6 +1,8 @@
 package com.atguigu.gmall.common.redisson;
 
+import com.atguigu.gmall.common.constants.RedisConst;
 import org.redisson.Redisson;
+import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +25,20 @@ public class RedissonAutoConfiguration {
         // 默认连接地址 127.0.0.1:6379
         Config config = new Config();
         config.useSingleServer()
-                .setAddress("redis://"+redisProperties.getHost() + ":" + redisProperties.getPort())
+                .setAddress("redis://" + redisProperties.getHost() + ":" + redisProperties.getPort())
                 .setPassword(redisProperties.getPassword());
         RedissonClient redisson = Redisson.create(config);
         return redisson;
+    }
+
+    @Bean
+    public RBloomFilter<Long> skuBloom(RedissonClient redissonClient) {
+        RBloomFilter<Long> bloomFilter = redissonClient.getBloomFilter(RedisConst.BLOOM_SKU_ID);
+        if (bloomFilter.isExists()) {
+            return bloomFilter;
+        } else {
+            bloomFilter.tryInit(500000, 0.0000001);
+        }
+        return bloomFilter;
     }
 }

@@ -1,5 +1,7 @@
 package com.atguigu.gmall.item.service.Impl;
 
+import com.atguigu.gmall.common.cache.CatchService;
+import com.atguigu.gmall.common.constants.RedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.common.util.JSONs;
 import com.atguigu.gmall.feign.item.ItemFeignClient;
@@ -9,6 +11,7 @@ import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuInfo;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.atguigu.gmall.model.to.SkuDetailTo;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,10 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
     @Autowired
     ThreadPoolExecutor corePool;
+
+
+    @Autowired
+    CatchService catchService;
     //商品详情服务：
     //查询sku详情得做这么多式
     //1、查分类
@@ -42,14 +49,24 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
     /**
      * 缓存查询
+     *
      * @param skuId
      * @return
      */
     @Override
     public SkuDetailTo getSkuDetial(Long skuId) {
+        //1.从缓存中查数据
+        SkuDetailTo cacheData = catchService.getCacheData(RedisConst.SKU_CACHE_KEY_PREFIX + skuId, new TypeReference<SkuDetailTo>() {
+        });
+        if (cacheData==null){
+            //2.缓存中没有数据,查库[回源]
+            //回源之前,先经过布隆过滤器 如果布隆过滤器中有 则回源 反之则不回
 
+
+        }
         return null;
     }
+
     public SkuDetailTo getSkuDetialFromDb(Long skuId) {
         SkuDetailTo skuDetailTo = new SkuDetailTo();
         //异步 编排: 编组(管理)+排列组合(运行)
@@ -79,14 +96,14 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         CompletableFuture<Void> SpuSaleAttrTask = CompletableFuture.runAsync(() -> {
             //4、查所有销售属性组合
             Result<List<SpuSaleAttr>> skudeSpuSaleAttrAndValue = productFeignClient.getSkudeSpuSaleAttrAndValue(skuId);
-            if (skudeSpuSaleAttrAndValue.isOk()){
+            if (skudeSpuSaleAttrAndValue.isOk()) {
                 skuDetailTo.setSpuSaleAttrList(skudeSpuSaleAttrAndValue.getData());
             }
         }, corePool);
         CompletableFuture<Void> valueJsonTask = CompletableFuture.runAsync(() -> {
             //5、查实际sku组合
             Result<Map<String, String>> skuValueJson = productFeignClient.getSkuValueJson(skuId);
-            if(skuValueJson.isOk()){
+            if (skuValueJson.isOk()) {
                 Map<String, String> jsonData = skuValueJson.getData();
                 skuDetailTo.setValuesSkuJson(JSONs.toStr(jsonData));
             }
