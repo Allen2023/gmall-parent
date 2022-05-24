@@ -17,7 +17,7 @@ public class guavaTest {
      * long expectedInsertions, 预估数据量
      * double fpp 误判率
      */
-    @Test
+   // @Test
     public void bloomTest() {
         Funnel<Integer> funnel = Funnels.integerFunnel();
         //  void funnel(T var1, PrimitiveSink var2);
