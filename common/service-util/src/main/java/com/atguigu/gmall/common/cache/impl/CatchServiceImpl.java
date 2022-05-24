@@ -20,29 +20,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class CatchServiceImpl implements CatchService {
 
+
     @Autowired
     StringRedisTemplate redisTemplate;
-
-    @Override
-    public List<CategoryAndChildTo> getAllCategoryWithChilds() {
-        //1.查询redis里的缓存数据  [序列化]
-        String categorys = redisTemplate.opsForValue().get("categorys");
-        //2.redis没有缓存这个key的数据
-        if (StringUtils.isEmpty(categorys)) {
-            return null;
-        }
-        //3.redis里有数据 [反序列化]
-        List<CategoryAndChildTo> categoryAndChildToList = JSONs.strToCategoryObject(categorys);
-        return categoryAndChildToList;
-    }
-
-    @Override
-    public void saveData(List<CategoryAndChildTo> childs) {
-        //1.将对象转化成String
-        String strchilds = JSONs.toStr(childs);
-        //存入redis
-        redisTemplate.opsForValue().set("categorys", strchilds);
-    }
 
     /**
      * 获取缓存数据
@@ -87,4 +67,29 @@ public class CatchServiceImpl implements CatchService {
             redisTemplate.opsForValue().set(key, JSONs.toStr(data), 3, TimeUnit.DAYS);
         }
     }
+
+    @Override
+    public List<CategoryAndChildTo> getAllCategoryWithChilds() {
+        //1.查询redis里的缓存数据  [序列化]
+        String categorys = redisTemplate.opsForValue().get("categorys");
+        //2.redis没有缓存这个key的数据
+        if (StringUtils.isEmpty(categorys)) {
+            return null;
+        }
+        //3.redis里有数据 [反序列化]
+        List<CategoryAndChildTo> categoryAndChildToList = JSONs.strToCategoryObject(categorys);
+        return categoryAndChildToList;
+    }
+
+    @Override
+    public void saveData(List<CategoryAndChildTo> childs) {
+        //1.将对象转化成String
+        String strchilds = JSONs.toStr(childs);
+        //存入redis
+        redisTemplate.opsForValue().set("categorys", strchilds);
+    }
+
+
+
+
 }
