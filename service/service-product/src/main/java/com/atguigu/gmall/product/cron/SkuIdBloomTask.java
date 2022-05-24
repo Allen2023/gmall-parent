@@ -3,6 +3,7 @@ package com.atguigu.gmall.product.cron;
 import com.atguigu.gmall.common.redisson.BloomTask;
 import com.atguigu.gmall.common.redisson.SkuBloomTask;
 import com.atguigu.gmall.product.service.SkuInfoService;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBloomFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,17 +17,24 @@ import java.util.List;
  * @Description: TODO
  * @DateTime: 2022/5/25 1:42
  */
+@Slf4j
 @Component
 public class SkuIdBloomTask implements SkuBloomTask {
     @Autowired
     SkuInfoService skuInfoService;
 
+    @Autowired
+    RBloomFilter<Object> skuBloom;
 
 
     //秒 分 时 日 月 周 MON_FRI
     @Scheduled(cron = "0 0 3 * * 3")
     public void rebuildBloom() {
         //重建布隆
+        log.info("系统正在重建sku布隆");
+        skuBloom.delete();
+        skuBloom.tryInit(5000000, 0.0000001);
+        initData(skuBloom);
     }
 
     /**

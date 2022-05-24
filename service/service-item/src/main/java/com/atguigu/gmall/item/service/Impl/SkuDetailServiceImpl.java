@@ -11,6 +11,8 @@ import com.atguigu.gmall.model.product.SkuInfo;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.atguigu.gmall.model.to.SkuDetailTo;
 import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RBloomFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Description: TODO
  * @DateTime: 2022/5/22 23:32
  */
+@Slf4j
 @Service
 public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
@@ -36,6 +39,9 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
     @Autowired
     CatchService catchService;
+
+    @Autowired
+    RBloomFilter<Object> skuBloom;
     //商品详情服务：
     //查询sku详情得做这么多式
     //1、查分类
@@ -54,16 +60,29 @@ public class SkuDetailServiceImpl implements SkuDetailService {
      */
     @Override
     public SkuDetailTo getSkuDetial(Long skuId) {
+        String key = RedisConst.SKU_CACHE_KEY_PREFIX + skuId;
         //1.从缓存中查数据
-        SkuDetailTo cacheData = catchService.getCacheData(RedisConst.SKU_CACHE_KEY_PREFIX + skuId, new TypeReference<SkuDetailTo>() {
+        SkuDetailTo cacheData = catchService.getCacheData(key, new TypeReference<SkuDetailTo>() {
         });
-        if (cacheData==null){
+        if (cacheData == null) {
             //2.缓存中没有数据,查库[回源]
             //回源之前,先经过布隆过滤器 如果布隆过滤器中有 则回源 反之则不回
-
-
+            if (skuBloom.contains(skuId)) {
+                //数据库中有此id从数据库查数据
+                log.info("SkuDetial缓存未命中,回源数据", skuId);
+                SkuDetailTo detialFromDb = getSkuDetialFromDb(skuId);
+                //保存在缓存中
+                log.info("回源数据保存进缓存");
+                catchService.saveCatchData(key, detialFromDb);
+                return detialFromDb;
+            }
+            //数据库中无id 布隆说没有
+            log.info("skuId缓存未命中,数据库中无此id,拦截", skuId);
+            return null;
         }
-        return null;
+        log.info("缓存命中");
+        //缓存中有数据
+        return cacheData;
     }
 
     public SkuDetailTo getSkuDetialFromDb(Long skuId) {

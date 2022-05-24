@@ -23,7 +23,7 @@ import java.util.List;
 @Configuration
 public class RedissonAutoConfiguration {
 
-    @Autowired
+    @Autowired(required = false)
     List<BloomTask> bloomTask;
 
     @Bean
