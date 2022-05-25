@@ -9,5 +9,6 @@ public class RedisConst {
     public static final String CATEGORY_CACHE_KEY = "categorys";
     public static final String SKU_CACHE_KEY_PREFIX = "sku:detail:";
     public static final String BLOOM_SKU_ID = "BLOOM:skuId";
+    public static final String LOCK_PREFIX = "lock:";
 
 }

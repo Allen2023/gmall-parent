@@ -64,7 +64,10 @@ public class CatchServiceImpl implements CatchService {
             redisTemplate.opsForValue().set(key, "null", 30, TimeUnit.MINUTES);
         } else {
             //数据库有。 有的数据缓存的久一点
-            redisTemplate.opsForValue().set(key, JSONs.toStr(data), 3, TimeUnit.DAYS);
+            //为了防止同时过期,给每个过期时间加上随机值
+            Double v = Math.random() * 1000000000L;
+            long millis = 1000 * 60 * 60 * 24 * 3 + v.intValue();
+            redisTemplate.opsForValue().set(key, JSONs.toStr(data), millis, TimeUnit.DAYS);
         }
     }
 
