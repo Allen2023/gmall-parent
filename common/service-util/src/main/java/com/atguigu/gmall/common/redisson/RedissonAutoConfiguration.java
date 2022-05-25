@@ -26,6 +26,11 @@ public class RedissonAutoConfiguration {
     @Autowired(required = false)
     List<BloomTask> bloomTask;
 
+    /**
+     * 配置RedissonClient
+     * @param redisProperties
+     * @return
+     */
     @Bean
     public RedissonClient redissonClient(RedisProperties redisProperties) {
         // 默认连接地址 127.0.0.1:6379
@@ -37,8 +42,13 @@ public class RedissonAutoConfiguration {
         return redisson;
     }
 
+    /**
+     * 布隆过滤器配置
+     * @param redissonClient
+     * @return
+     */
     @Bean
-    public RBloomFilter<Object> skuBloom(RedissonClient redissonClient) {
+    public RBloomFilter<Object> skuIdBloom(RedissonClient redissonClient) {
         RBloomFilter<Object> bloomFilter = redissonClient.getBloomFilter(RedisConst.BLOOM_SKU_ID);
         if (bloomFilter.isExists()) {
             return bloomFilter;//存在布隆直接返回

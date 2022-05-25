@@ -24,7 +24,7 @@ public class SkuIdBloomTask implements SkuBloomTask {
     SkuInfoService skuInfoService;
 
     @Autowired
-    RBloomFilter<Object> skuBloom;
+    RBloomFilter<Object> skuIdBloom;
 
 
     //秒 分 时 日 月 周 MON_FRI
@@ -32,9 +32,9 @@ public class SkuIdBloomTask implements SkuBloomTask {
     public void rebuildBloom() {
         //重建布隆
         log.info("系统正在重建sku布隆");
-        skuBloom.delete();
-        skuBloom.tryInit(5000000, 0.0000001);
-        initData(skuBloom);
+        skuIdBloom.delete();
+        skuIdBloom.tryInit(500000, 0.0000001);
+        initData(skuIdBloom);
     }
 
     /**
@@ -42,11 +42,12 @@ public class SkuIdBloomTask implements SkuBloomTask {
      * 1.去数据库查询到所有的skuId ,然后添加到布隆中
      */
     @Override
-    public void initData(RBloomFilter<Object> skuBloom) {
+    public void initData(RBloomFilter<Object> skuIdBloom) {
         //初始化布隆  查出所有的skuId放入布隆
+        log.info("系统正在初始化sku布隆");
         List<Long> ids = skuInfoService.getAllSkuIds();
         for (Long id : ids) {
-            skuBloom.add(id);
+            skuIdBloom.add(id);
         }
     }
 }

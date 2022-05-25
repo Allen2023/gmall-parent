@@ -41,7 +41,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     CatchService catchService;
 
     @Autowired
-    RBloomFilter<Object> skuBloom;
+    RBloomFilter<Object> skuIdBloom;
     //商品详情服务：
     //查询sku详情得做这么多式
     //1、查分类
@@ -67,7 +67,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         if (cacheData == null) {
             //2.缓存中没有数据,查库[回源]
             //回源之前,先经过布隆过滤器 如果布隆过滤器中有 则回源 反之则不回
-            if (skuBloom.contains(skuId)) {
+            if (skuIdBloom.contains(skuId)) {
                 //数据库中有此id从数据库查数据
                 log.info("SkuDetial缓存未命中,回源数据", skuId);
                 SkuDetailTo detialFromDb = getSkuDetialFromDb(skuId);
@@ -129,7 +129,6 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
         //allOf 返回的 CompletableFuture 总任务结束再往下
         CompletableFuture.allOf(categoryTask, SkuTask, PriceTask, SpuSaleAttrTask, valueJsonTask).join();
-
         return skuDetailTo;
     }
 

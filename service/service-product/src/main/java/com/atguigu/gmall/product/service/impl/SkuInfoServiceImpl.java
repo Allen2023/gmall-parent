@@ -38,9 +38,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     @Autowired
     SpuSaleAttrMapper spuSaleAttrMapper;
 
-    @Qualifier("skuBloom")
+    @Qualifier("skuIdBloom")
     @Autowired
-    RBloomFilter<Object> skuBloom;
+    RBloomFilter<Object> skuIdBloom;
 
     @Override
     public void saveSkuInfo(SkuInfo skuInfo) {
@@ -48,7 +48,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         skuInfoMapper.insert(skuInfo);
 
         Long id = skuInfo.getId();
-        skuBloom.add(id);
+        skuIdBloom.add(id);
         // 就算删了的，布隆说有，我们查询数据库结果为null，我们也会缓存null值。
         // 就算布隆误判或者真没，都不担心会跟数据库建立大量连接；
 
