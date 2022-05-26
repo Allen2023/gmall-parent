@@ -10,5 +10,5 @@ import com.atguigu.gmall.model.to.SkuDetailTo;
 public interface SkuDetailService {
 
 
-    SkuDetailTo getSkuDetial(Long skuId);
+    SkuDetailTo getSkuDetail(Long skuId) throws InterruptedException;
 }

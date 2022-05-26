@@ -27,12 +27,13 @@ public class SkuDetailRpcController {
 
     /**
      * 查询商品详情
+     *
      * @param skuId
      * @return
      */
     @GetMapping("/sku/detail/{skuId}")
-    public Result<SkuDetailTo> getSkuDetail(@PathVariable("skuId") Long skuId) {
-        SkuDetailTo skuDetial = skuDetailService.getSkuDetial(skuId);
+    public Result<SkuDetailTo> getSkuDetail(@PathVariable("skuId") Long skuId) throws Exception {
+        SkuDetailTo skuDetial = skuDetailService.getSkuDetail(skuId);
         return Result.ok(skuDetial);
     }
 }
