@@ -11,9 +11,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 
 //每个微服务中，自己需要调用谁就导入谁
-@EnableAutoCache//开启自动缓存
 @EnableAspectJAutoProxy//开启切面自动代理
-@EnableRedissonandCache//开启Redisson
 @EnableAppThreadPool//开启自定义线程池配置
 @EnableFeignClients(basePackages = "com.atguigu.gmall.feign.product")
 @Configuration

@@ -15,8 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @Description: TODO
  * @DateTime: 2022/5/18 20:40
  */
-@EnableAutoCache//开启自动缓存
-@EnableRedissonandCache//开启Redisson 布隆过滤器
+
 @EnableAutoHandleException //开启全局异常处理
 @EnableMybatisPlusConfig //开启Mybatis-plus分页插件
 @EnableSwaggerApi //开启Swagger
