@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.constants.RedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.common.util.JSONs;
 import com.atguigu.gmall.feign.product.ProductFeignClient;
+import com.atguigu.gmall.common.cache.aop.annotation.Cache;
 import com.atguigu.gmall.item.service.SkuDetailService;
 import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuInfo;
@@ -55,6 +56,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
     @Autowired
     RedissonClient redissonClient;
+
     //商品详情服务：
     //查询sku详情得做这么多式
     //1、查分类
@@ -64,6 +66,12 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     //5、查所有销售属性组合
     //6、查实际sku组合
     //7、查介绍(不用管)
+    @Cache
+    @Override
+    public SkuDetailTo getSkuDetail(Long skuId) throws InterruptedException {
+        log.info("从数据库查询商品详情" + skuId + "信息");
+        return getSkuDetialFromDb(skuId);
+    }
 
     /**
      * 用Redisson查询
@@ -71,8 +79,8 @@ public class SkuDetailServiceImpl implements SkuDetailService {
      * @param skuId
      * @return
      */
-    @Override
-    public SkuDetailTo getSkuDetail(Long skuId) throws InterruptedException {
+    //@Override
+    public SkuDetailTo getSkuDetailByRedissonLock(Long skuId) throws InterruptedException {
         String key = RedisConst.SKU_CACHE_KEY_PREFIX + skuId;
         log.info("从缓存中读取数据");
         //1.从缓存中读数据
@@ -114,7 +122,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
                     log.info("查询到缓存数据,返回结果");
                     return cacheData;
                 } catch (InterruptedException e) {
-                    log.error("SkuDetail：睡眠异常：{}",e);
+                    log.error("SkuDetail：睡眠异常：{}", e);
                 }
             }
             //数据库中无id 布隆说没有
@@ -122,7 +130,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
             return null;
         }
         //缓存中有数据
-        log.info("缓存命中"+skuId);
+        log.info("缓存命中" + skuId);
         //缓存命中率？越高越好
         // 1-1: 0
         // 2-2： 命中/总请求 = 0.5
