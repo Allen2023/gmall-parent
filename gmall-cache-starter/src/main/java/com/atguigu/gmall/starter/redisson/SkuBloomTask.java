@@ -1,6 +1,4 @@
-package com.atguigu.gmall.common.redisson;
-
-import org.redisson.api.RBloomFilter;
+package com.atguigu.gmall.starter.redisson;
 
 /**
  * @Author: xsz

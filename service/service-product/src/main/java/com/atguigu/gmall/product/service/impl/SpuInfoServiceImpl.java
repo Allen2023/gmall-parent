@@ -1,12 +1,12 @@
 package com.atguigu.gmall.product.service.impl;
 
-import com.atguigu.gmall.common.cache.aop.annotation.Cache;
-import com.atguigu.gmall.common.constants.RedisConst;
+
+import com.atguigu.gmall.starter.cache.aop.annotation.Cache;
+import com.atguigu.gmall.starter.constants.RedisConst;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.product.mapper.SpuImageMapper;
 import com.atguigu.gmall.product.mapper.SpuSaleAttrMapper;
 import com.atguigu.gmall.product.mapper.SpuSaleAttrValueMapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

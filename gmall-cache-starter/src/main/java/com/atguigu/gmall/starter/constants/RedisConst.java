@@ -1,4 +1,4 @@
-package com.atguigu.gmall.common.constants;
+package com.atguigu.gmall.starter.constants;
 
 /**
  * @Author: xsz

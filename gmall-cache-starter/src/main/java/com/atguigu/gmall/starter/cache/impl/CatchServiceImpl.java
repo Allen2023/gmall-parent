@@ -1,8 +1,9 @@
-package com.atguigu.gmall.common.cache.impl;
+package com.atguigu.gmall.starter.cache.impl;
 
-import com.atguigu.gmall.common.util.JSONs;
-import com.atguigu.gmall.model.to.CategoryAndChildTo;
-import com.atguigu.gmall.common.cache.CatchService;
+
+
+import com.atguigu.gmall.starter.cache.CatchService;
+import com.atguigu.gmall.starter.util.JSONs;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -71,26 +72,7 @@ public class CatchServiceImpl implements CatchService {
         }
     }
 
-    @Override
-    public List<CategoryAndChildTo> getAllCategoryWithChilds() {
-        //1.查询redis里的缓存数据  [序列化]
-        String categorys = redisTemplate.opsForValue().get("categorys");
-        //2.redis没有缓存这个key的数据
-        if (StringUtils.isEmpty(categorys)) {
-            return null;
-        }
-        //3.redis里有数据 [反序列化]
-        List<CategoryAndChildTo> categoryAndChildToList = JSONs.strToCategoryObject(categorys);
-        return categoryAndChildToList;
-    }
 
-    @Override
-    public void saveData(List<CategoryAndChildTo> childs) {
-        //1.将对象转化成String
-        String strchilds = JSONs.toStr(childs);
-        //存入redis
-        redisTemplate.opsForValue().set("categorys", strchilds);
-    }
 
 
 }

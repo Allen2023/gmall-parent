@@ -1,4 +1,4 @@
-package com.atguigu.gmall.common.cache.aop.annotation;
+package com.atguigu.gmall.starter.cache.aop.annotation;
 
 import org.springframework.core.annotation.AliasFor;
 

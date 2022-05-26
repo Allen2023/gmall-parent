@@ -1,6 +1,6 @@
-package com.atguigu.gmall.common.redisson;
+package com.atguigu.gmall.starter.redisson;
 
-import com.atguigu.gmall.common.constants.RedisConst;
+import com.atguigu.gmall.starter.constants.RedisConst;
 import org.redisson.Redisson;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;

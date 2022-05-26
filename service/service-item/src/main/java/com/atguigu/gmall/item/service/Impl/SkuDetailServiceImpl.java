@@ -1,11 +1,11 @@
 package com.atguigu.gmall.item.service.Impl;
 
-import com.atguigu.gmall.common.cache.CatchService;
-import com.atguigu.gmall.common.constants.RedisConst;
+import com.atguigu.gmall.starter.cache.CatchService;
+import com.atguigu.gmall.starter.constants.RedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.common.util.JSONs;
 import com.atguigu.gmall.feign.product.ProductFeignClient;
-import com.atguigu.gmall.common.cache.aop.annotation.Cache;
+import com.atguigu.gmall.starter.cache.aop.annotation.Cache;
 import com.atguigu.gmall.item.service.SkuDetailService;
 import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuInfo;

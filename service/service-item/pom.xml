@@ -36,6 +36,10 @@
         <artifactId>service-util</artifactId>
         <version>1.0</version>
     </dependency>
-
+    <dependency>
+        <groupId>com.atguigu.gmall</groupId>
+        <artifactId>gmall-cache-starter</artifactId>
+        <version>1.0</version>
+    </dependency>
 </dependencies>
 </project>

@@ -1,7 +1,6 @@
 package com.atguigu.gmall.product.controller;
 
 
-import com.atguigu.gmall.common.redisson.SkuBloomTask;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.product.cron.SkuIdBloomTask;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,15 +1,16 @@
 package com.atguigu.gmall.product.service.impl;
 
 
-import com.atguigu.gmall.common.cache.aop.annotation.Cache;
-import com.atguigu.gmall.common.constants.RedisConst;
+
+import com.atguigu.gmall.starter.constants.RedisConst;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.model.to.CategoryAndChildTo;
 import com.atguigu.gmall.product.mapper.CategoryMapper1;
 import com.atguigu.gmall.product.mapper.CategoryMapper2;
 import com.atguigu.gmall.product.mapper.CategoryMapper3;
-import com.atguigu.gmall.common.cache.CatchService;
 import com.atguigu.gmall.product.service.CategoryService;
+import com.atguigu.gmall.starter.cache.CatchService;
+import com.atguigu.gmall.starter.cache.aop.annotation.Cache;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,21 +33,21 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CatchService catchService;
 
-
+    @Cache(cacheKey = "category:level:1")
     @Override
     public List<BaseCategory1> getAllCategory1() {
         List<BaseCategory1> baseCategory1List = categoryMapper1.selectList(null);
         return baseCategory1List;
     }
 
-
+    @Cache(cacheKey = "category:level:2:#{#args[0]}")
     @Override
     public List<BaseCategory2> getCategory2Byc1(Long category1Id) {
         QueryWrapper<BaseCategory2> wrapper = new QueryWrapper<BaseCategory2>().eq("category1_id", category1Id);
         List<BaseCategory2> baseCategory2List = categoryMapper2.selectList(wrapper);
         return baseCategory2List;
     }
-
+    @Cache(cacheKey = "category:level:3:#{#args[0]}")
     @Override
     public List<BaseCategory3> getCategory3Byc2(Long category2Id) {
         QueryWrapper<BaseCategory3> wrapper = new QueryWrapper<BaseCategory3>().eq("category2_id", category2Id);

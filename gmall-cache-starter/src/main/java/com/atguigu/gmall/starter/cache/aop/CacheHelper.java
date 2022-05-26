@@ -1,7 +1,7 @@
-package com.atguigu.gmall.common.cache.aop;
+package com.atguigu.gmall.starter.cache.aop;
 
-import com.atguigu.gmall.common.cache.CatchService;
-import com.atguigu.gmall.common.cache.aop.annotation.Cache;
+import com.atguigu.gmall.starter.cache.CatchService;
+import com.atguigu.gmall.starter.cache.aop.annotation.Cache;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

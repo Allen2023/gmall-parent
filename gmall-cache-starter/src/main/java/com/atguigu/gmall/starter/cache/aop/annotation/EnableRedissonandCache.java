@@ -1,8 +1,8 @@
-package com.atguigu.gmall.common.annotation;
+package com.atguigu.gmall.starter.cache.aop.annotation;
 
-import com.atguigu.gmall.common.cache.CatchService;
-import com.atguigu.gmall.common.cache.impl.CatchServiceImpl;
-import com.atguigu.gmall.common.redisson.RedissonAutoConfiguration;
+
+import com.atguigu.gmall.starter.cache.impl.CatchServiceImpl;
+import com.atguigu.gmall.starter.redisson.RedissonAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

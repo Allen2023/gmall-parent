@@ -10,6 +10,7 @@
         <module name="server-gateway" />
         <module name="web-all" />
         <module name="common-util" />
+        <module name="gmall-cache-starter" />
         <module name="service-feign-client" />
         <module name="service-product" />
         <module name="model" />
@@ -26,6 +27,7 @@
       <module name="abc" options="-parameters" />
       <module name="common" options="-parameters" />
       <module name="common-util" options="-parameters" />
+      <module name="gmall-cache-starter" options="-parameters" />
       <module name="model" options="-parameters" />
       <module name="server-gateway" options="-parameters" />
       <module name="service" options="-parameters" />

@@ -1,6 +1,6 @@
-package com.atguigu.gmall.common.cache.aop;
+package com.atguigu.gmall.starter.cache.aop;
 
-import com.atguigu.gmall.common.constants.RedisConst;
+import com.atguigu.gmall.starter.constants.RedisConst;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,7 +20,7 @@ public class CacheAspect {
     @Autowired
     CacheHelper cacheHelper;
 
-    @Around(value = "@annotation(com.atguigu.gmall.common.cache.aop.annotation.Cache)")
+    @Around(value = "@annotation(com.atguigu.gmall.starter.cache.aop.annotation.Cache)")
     public Object around(ProceedingJoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();//目标方法参数
         //String cacheKey1 = RedisConst.SKU_CACHE_KEY_PREFIX + args[0];

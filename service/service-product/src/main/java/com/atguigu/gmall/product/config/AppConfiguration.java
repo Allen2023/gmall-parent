@@ -2,6 +2,8 @@ package com.atguigu.gmall.product.config;
 
 import com.atguigu.gmall.common.annotation.*;
 import com.atguigu.gmall.product.annotation.ProductConfig;
+import com.atguigu.gmall.starter.cache.aop.annotation.EnableAutoCache;
+import com.atguigu.gmall.starter.cache.aop.annotation.EnableRedissonandCache;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 

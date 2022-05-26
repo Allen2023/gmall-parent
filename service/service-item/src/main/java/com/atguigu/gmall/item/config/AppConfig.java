@@ -3,8 +3,8 @@ package com.atguigu.gmall.item.config;
 
 import com.atguigu.gmall.common.annotation.EnableAppThreadPool;
 
-import com.atguigu.gmall.common.annotation.EnableAutoCache;
-import com.atguigu.gmall.common.annotation.EnableRedissonandCache;
+import com.atguigu.gmall.starter.cache.aop.annotation.EnableAutoCache;
+import com.atguigu.gmall.starter.cache.aop.annotation.EnableRedissonandCache;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;

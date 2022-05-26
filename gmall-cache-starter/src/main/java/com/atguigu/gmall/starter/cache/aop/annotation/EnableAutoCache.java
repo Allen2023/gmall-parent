@@ -1,7 +1,8 @@
-package com.atguigu.gmall.common.annotation;
+package com.atguigu.gmall.starter.cache.aop.annotation;
 
-import com.atguigu.gmall.common.cache.aop.CacheAspect;
-import com.atguigu.gmall.common.cache.aop.CacheHelper;
+
+import com.atguigu.gmall.starter.cache.aop.CacheAspect;
+import com.atguigu.gmall.starter.cache.aop.CacheHelper;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
