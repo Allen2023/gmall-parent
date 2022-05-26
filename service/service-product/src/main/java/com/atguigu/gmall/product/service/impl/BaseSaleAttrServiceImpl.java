@@ -23,8 +23,6 @@ public class BaseSaleAttrServiceImpl extends ServiceImpl<BaseSaleAttrMapper, Bas
 
     @Override
     public List<BaseSaleAttr> getBaseSaleAttrList() {
-
-
         List<BaseSaleAttr> baseSaleAttrs = baseSaleAttrMapper.selectList(null);
         return  baseSaleAttrs;
 

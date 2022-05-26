@@ -1,5 +1,7 @@
 package com.atguigu.gmall.product.service.impl;
 
+import com.atguigu.gmall.common.cache.aop.annotation.Cache;
+import com.atguigu.gmall.common.constants.RedisConst;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.product.mapper.SpuImageMapper;
 import com.atguigu.gmall.product.mapper.SpuSaleAttrMapper;
@@ -82,6 +84,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
 
     }
 
+    @Cache(cacheKey = RedisConst.SALE_ATTR_CACHE_KEY)
     @Override
     public List<SpuSaleAttr> getSpuSaleAttrList(Long spuId) {
        /* //1.查询SpuSaleAttr
@@ -92,7 +95,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
             spuSaleAttr.setSpuSaleAttrValueList(spuSaleAttrValueList);
         }
         return spuSaleAttrList;*/
-
         List<SpuSaleAttr> spuSaleAttrs = spuSaleAttrValueMapper.getSpuSaleAttrAndValue(spuId);
         return spuSaleAttrs;
     }
