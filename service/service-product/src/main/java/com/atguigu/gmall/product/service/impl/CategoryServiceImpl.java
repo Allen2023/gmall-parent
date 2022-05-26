@@ -1,6 +1,7 @@
 package com.atguigu.gmall.product.service.impl;
 
 
+import com.atguigu.gmall.common.cache.aop.annotation.Cache;
 import com.atguigu.gmall.common.constants.RedisConst;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.model.to.CategoryAndChildTo;
@@ -52,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
         List<BaseCategory3> baseCategory3List = categoryMapper3.selectList(wrapper);
         return baseCategory3List;
     }
-
+    @Cache(cacheKey = RedisConst.CATEGORY_CACHE_KEY)
     @Override
     public List<CategoryAndChildTo> getAllCategoryWithChilds() {
         //1.查询缓存

@@ -31,15 +31,29 @@ public class CacheAspect {
             //前置通知  先查询缓存 中有没有这个数据
             Object cacheData = cacheHelper.getCacheData(cacheKey, joinPoint);
             if (cacheData == null) {
-
+                //锁key 锁前缀+缓存key
+                String lockKey = RedisConst.LOCK_PREFIX + cacheKey;
+                //判断是否需要用到布隆过滤器
                 String bloomName = cacheHelper.determineBloom(joinPoint);//决定是否用布隆
                 if (StringUtils.isEmpty(bloomName)) {
                     //布隆名为空不启用布隆
-
+                    boolean tryLock = cacheHelper.tryLock(lockKey);
+                    if (tryLock) {
+                        //抢到锁
+                        result = joinPoint.proceed();//执行目标方法 查询数据库
+                        cacheHelper.saveCatchData(cacheKey, result);
+                        //解锁
+                        cacheHelper.unlock(lockKey);
+                        return result;
+                    }
+                    //没加锁成功
+                    Thread.sleep(1000);
+                    cacheData = cacheHelper.getCacheData(cacheKey, joinPoint);
+                    return cacheData;
                 } else {
-                    boolean contains = cacheHelper.bloomTest(bloomName,joinPoint);//布隆过滤器验证
+                    //启用布隆
+                    boolean contains = cacheHelper.bloomTest(bloomName, joinPoint);//布隆过滤器验证
                     if (contains) {//布隆过滤器验证成功
-                        String lockKey = RedisConst.SKUDETAIL_LOCK_PREFIX + args[0];
                         boolean tryLock = cacheHelper.tryLock(lockKey);
                         if (tryLock) {
                             result = joinPoint.proceed();//执行目标方法 查询数据库
