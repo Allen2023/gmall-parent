@@ -38,13 +38,19 @@
         <swagger.version>2.7.0</swagger.version>
         <fastdfs.version>1.27.0.0</fastdfs.version>
         <lombok.version>1.18.10</lombok.version>
+        <shardingsphere.version>5.1.0</shardingsphere.version>
     </properties>
 
     <!--配置dependencyManagement锁定依赖的版本 并不是实际的依赖。-->
     <!--    子项目需要什么导入即可，而且不用写版本，真正的jar会导入到需要的子项目中-->
     <dependencyManagement>
         <dependencies>
-
+            <!--shardingsphere-->
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

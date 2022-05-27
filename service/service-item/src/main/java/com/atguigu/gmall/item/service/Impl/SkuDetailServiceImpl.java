@@ -66,8 +66,8 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     //5、查所有销售属性组合
     //6、查实际sku组合
     //7、查介绍(不用管)
-    @Cache(cacheKey = RedisConst.SKU_CACHE_KEY_PREFIX+"#{#args[0]}",
-            bloomName = "skuIdBloom",bloomValue = "#{#args[0]}")
+    @Cache(cacheKey = RedisConst.SKU_CACHE_KEY_PREFIX + "#{#args[0]}",
+            bloomName = "skuIdBloom", bloomValue = "#{#args[0]}")
     @Override
     public SkuDetailTo getSkuDetail(Long skuId) throws InterruptedException {
         log.info("从数据库查询商品详情" + skuId + "信息");

@@ -3,6 +3,7 @@ package com.atguigu.gmall.product.mapper;
 
 import com.atguigu.gmall.model.product.BaseSaleAttr;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author 86185
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2022-05-19 10:16:55
 * @Entity com.atguigu.gmall.product.domain.BaseSaleAttr
 */
+@Mapper
 public interface BaseSaleAttrMapper extends BaseMapper<BaseSaleAttr> {
 
 }
