@@ -27,10 +27,10 @@ public class Testone {
 
     @Test
     public void Test1() {
-        BaseTrademark baseTrademark = mapper.selectById(13L);
+        BaseTrademark baseTrademark = mapper.selectById(12L);
         System.out.println("baseTrademark = " + baseTrademark);
 
-        BaseTrademark baseTrademark1 = mapper.selectById(13L);
+        BaseTrademark baseTrademark1 = mapper.selectById(12L);
         System.out.println("baseTrademark1 = " + baseTrademark1);
     }
 }
