@@ -12,6 +12,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -22,6 +23,9 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: xsz
@@ -42,9 +46,14 @@ public class CacheHelper {
     RedissonClient redissonClient;
 
     @Autowired
-    Map<String,RBloomFilter<Object>> bloomMap;
+    Map<String, RBloomFilter<Object>> bloomMap;
 
     SpelExpressionParser parser = new SpelExpressionParser();
+    ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
 
     /**
      * 获取缓存数据
@@ -91,19 +100,20 @@ public class CacheHelper {
         String bloomValue = cache.bloomValue();
 
         //计算出布隆过滤器需要判定的值
-        Object bloomExpValue = getExpressionValue(joinPoint, bloomValue,Object.class);
-        log.info("判定布隆过滤器是有此id"+bloomExpValue);
+        Object bloomExpValue = getExpressionValue(joinPoint, bloomValue, Object.class);
+        log.info("判定布隆过滤器是有此id" + bloomExpValue);
         RBloomFilter<Object> bloomFilter = bloomMap.get(bloomName);
-        return  bloomFilter.contains(bloomExpValue);
+        return bloomFilter.contains(bloomExpValue);
     }
 
     /**
      * 解析表达式获取注解上的参数值
+     *
      * @param joinPoint
      * @param cacheKeyExpression
      * @return
      */
-    private <T> T getExpressionValue(ProceedingJoinPoint joinPoint, String cacheKeyExpression,Class<T> clazz) {
+    private <T> T getExpressionValue(ProceedingJoinPoint joinPoint, String cacheKeyExpression, Class<T> clazz) {
         //解析表达式
         //表达式
         Expression expression = parser.parseExpression(cacheKeyExpression, ParserContext.TEMPLATE_EXPRESSION);
@@ -154,13 +164,14 @@ public class CacheHelper {
         //拿到表达式 cacheKey = RedisConst.SKU_CACHE_KEY_PREFIX+"#{#args[0]}")
         String cacheKey = StringUtils.isEmpty(cache.cacheKey()) ? cache.value() : cache.cacheKey();
         //解析表达式
-        String value = getExpressionValue(joinPoint, cacheKey,String.class);
+        String value = getExpressionValue(joinPoint, cacheKey, String.class);
 
         return value;
     }
 
     /**
      * 判断是否需要布隆过滤器
+     *
      * @param joinPoint
      * @return
      */
@@ -176,6 +187,7 @@ public class CacheHelper {
 
     /**
      * 获取注解信息
+     *
      * @param joinPoint
      * @return
      */
@@ -187,6 +199,19 @@ public class CacheHelper {
         //拿到注解
         Cache cache = AnnotationUtils.findAnnotation(method, Cache.class);
         return cache;
+    }
+
+    /**
+     * 延时双删
+     *
+     * @param key
+     */
+    public void deleteCache(String key) {
+        //延时双删 删除key以后等10s 再删一次
+        redisTemplate.delete(key);
+        scheduledThreadPool.schedule(() -> {
+            redisTemplate.delete(key);
+        }, 10, TimeUnit.MINUTES);
     }
 
 }

@@ -70,6 +70,13 @@
         order by bai.category_level,bai.id
     </select>
 
+    <select id="getSkuBaseAttrNameAndValue" resultType="com.atguigu.gmall.model.list.SearchAttr">
+        select bai.id attr_id, bai.attr_name attr_name, baa.value_name attr_value
+        from base_attr_info bai
+                 LEFT JOIN sku_attr_value sav on bai.id = sav.attr_id
+                 LEFT JOIN base_attr_value baa on sav.value_id = baa.id
+        where sav.sku_id = #{skuId};
+    </select>
 
 
 </mapper>

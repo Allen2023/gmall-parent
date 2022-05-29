@@ -17,7 +17,7 @@ public class Goods {
     // 商品Id skuId
     @Id
     private Long id;
-
+    //index = false 不用建立倒排索引  这个字段不会用来作为查询条件.只是存起来
     @Field(type = FieldType.Keyword, index = false)
     private String defaultImg;
 

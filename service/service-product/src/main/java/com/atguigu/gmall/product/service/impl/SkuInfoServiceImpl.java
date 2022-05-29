@@ -1,6 +1,10 @@
 package com.atguigu.gmall.product.service.impl;
 
+import com.atguigu.gmall.feign.list.SearchFeignClient;
+import com.atguigu.gmall.model.list.Goods;
+import com.atguigu.gmall.model.list.SearchAttr;
 import com.atguigu.gmall.model.product.*;
+import com.atguigu.gmall.product.domain.BaseCategoryView;
 import com.atguigu.gmall.product.mapper.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +28,7 @@ import java.util.Map;
 @Service
 public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         implements SkuInfoService {
+
     @Autowired
     SkuInfoMapper skuInfoMapper;
 
@@ -38,9 +44,22 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     @Autowired
     SpuSaleAttrMapper spuSaleAttrMapper;
 
+
     @Qualifier("skuIdBloom")
     @Autowired
     RBloomFilter<Object> skuIdBloom;
+
+    @Autowired
+    SearchFeignClient searchFeignClient;
+
+    @Autowired
+    BaseTrademarkMapper baseTrademarkMapper;
+
+    @Autowired
+    BaseCategoryViewMapper baseCategoryViewMapper;
+
+    @Autowired
+    BaseAttrInfoMapper baseAttrInfoMapper;
 
     @Override
     public void saveSkuInfo(SkuInfo skuInfo) {
@@ -79,9 +98,58 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         }
     }
 
+    /**
+     * 上架和下架商品SKU
+     * @param skuId
+     * @param status
+     */
     @Override
     public void upOrDownSku(Long skuId, int status) {
+
         skuInfoMapper.upOrDownSku(skuId, status);
+        if (status==1){
+            //status==1为上架
+            Goods goods = this.getSkuInfoForSearch(skuId);
+            searchFeignClient.saveGoods(goods);
+        }
+        if(status==0){
+            //下架 从ES中删除该商品的数据
+            searchFeignClient.deleteGoods(skuId);
+        }
+    }
+    //查到当前sku的详细信息，封装成Goods
+    @Override
+    public Goods getSkuInfoForSearch(Long skuId) {
+        Goods goods = new Goods();
+        //1.查询sku信息,并封装进去
+        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+        goods.setId(skuInfo.getId());
+        goods.setDefaultImg(skuInfo.getSkuDefaultImg());
+        goods.setTitle(skuInfo.getSkuName());
+        goods.setPrice(skuInfo.getPrice().doubleValue());
+        goods.setCreateTime(new Date());
+        //2.封装品牌信息
+        BaseTrademark trademark = baseTrademarkMapper.selectById(skuInfo.getTmId());
+        goods.setTmId(trademark.getId());
+        goods.setTmName(trademark.getTmName());
+        goods.setTmLogoUrl(trademark.getLogoUrl());
+        //3.封装分类信息
+        LambdaQueryWrapper<BaseCategoryView> wrapper = new LambdaQueryWrapper<BaseCategoryView>()
+                .eq(BaseCategoryView::getCategory3Id, skuInfo.getCategory3Id());
+        BaseCategoryView categortView = baseCategoryViewMapper.selectOne(wrapper);
+        goods.setCategory1Id(categortView.getCategory1Id());
+        goods.setCategory1Name(categortView.getCategory1Name());
+        goods.setCategory2Id(categortView.getCategory2Id());
+        goods.setCategory2Name(categortView.getCategory2Name());
+        goods.setCategory3Id(categortView.getCategory3Id());
+        goods.setCategory3Name(categortView.getCategory3Name());
+        //4.热度分
+        goods.setHotScore(0L);
+
+        //5.当前sku的所有平台属性的名和值
+        List<SearchAttr> attrs = baseAttrInfoMapper.getSkuBaseAttrNameAndValue(skuId);
+        goods.setAttrs(attrs);
+        return goods;
     }
 
     @Override
@@ -98,9 +166,10 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
 
     @Override
     public List<Long> getAllSkuIds() {
-
         return skuInfoMapper.getSkuIds();
     }
+
+
 
 
 }

@@ -28,8 +28,10 @@ public class CacheAspect {
         String cacheKey = cacheHelper.evaluateExpression(joinPoint);
         Object result = null;
         try {
+            //先进行缓存清除，再执行update，最后(延迟N秒)再执行缓存清除。
             //前置通知  先查询缓存 中有没有这个数据
             Object cacheData = cacheHelper.getCacheData(cacheKey, joinPoint);
+            cacheHelper.deleteCache(cacheKey);
             if (cacheData == null) {
                 //锁key 锁前缀+缓存key
                 String lockKey = RedisConst.LOCK_PREFIX + cacheKey;
