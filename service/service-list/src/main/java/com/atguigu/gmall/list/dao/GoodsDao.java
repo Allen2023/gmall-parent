@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GoodsDao extends CrudRepository<Goods,Long> {
 
+
+
 }

@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 /**
  * @Author: xsz
  * @Description: TODO
@@ -32,6 +30,8 @@ public class SkuDetailRpcController {
     @GetMapping("/sku/detail/{skuId}")
     public Result<SkuDetailTo> getSkuDetail(@PathVariable("skuId") Long skuId) throws Exception {
         SkuDetailTo skuDetial = skuDetailService.getSkuDetail(skuId);
+        //增加商品热度
+        skuDetailService.updateHotScore(skuId);
         return Result.ok(skuDetial);
     }
 }

@@ -9,6 +9,17 @@ import com.atguigu.gmall.model.to.SkuDetailTo;
  */
 public interface SkuDetailService {
 
-
+    /**
+     * 查询当前skuId的详情数据
+     * @param skuId
+     * @return
+     * @throws InterruptedException
+     */
     SkuDetailTo getSkuDetail(Long skuId) throws InterruptedException;
+
+    /**
+     * 增加当前skuId的热度
+     * @param skuId
+     */
+    void updateHotScore(Long skuId);
 }

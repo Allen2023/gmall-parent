@@ -1,16 +1,17 @@
 package com.atguigu.gmall.item.service.Impl;
 
-import com.atguigu.gmall.starter.cache.CatchService;
-import com.atguigu.gmall.starter.constants.RedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.common.util.JSONs;
+import com.atguigu.gmall.feign.list.SearchFeignClient;
 import com.atguigu.gmall.feign.product.ProductFeignClient;
-import com.atguigu.gmall.starter.cache.aop.annotation.Cache;
 import com.atguigu.gmall.item.service.SkuDetailService;
 import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuInfo;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.atguigu.gmall.model.to.SkuDetailTo;
+import com.atguigu.gmall.starter.cache.CatchService;
+import com.atguigu.gmall.starter.cache.aop.annotation.Cache;
+import com.atguigu.gmall.starter.constants.RedisConst;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBloomFilter;
@@ -57,6 +58,10 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
     RedissonClient redissonClient;
 
+    @Autowired
+    SearchFeignClient searchFeignClient;
+
+
     //商品详情服务：
     //查询sku详情得做这么多式
     //1、查分类
@@ -73,6 +78,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         log.info("从数据库查询商品详情" + skuId + "信息");
         return getSkuDetialFromDb(skuId);
     }
+
 
     /**
      * 用Redisson查询
@@ -140,6 +146,74 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         return cacheData;
     }
 
+    /**
+     * 从数据库查SKuDetail
+     *
+     * @param skuId
+     * @return
+     */
+    public SkuDetailTo getSkuDetialFromDb(Long skuId) {
+        SkuDetailTo skuDetailTo = new SkuDetailTo();
+        //异步 编排: 编组(管理)+排列组合(运行)
+        CompletableFuture<Void> categoryTask = CompletableFuture.runAsync(() -> {
+            //1、查分类
+            Result<BaseCategoryView> skuCategoryView = productFeignClient.getSkuCategoryView(skuId);
+            if (skuCategoryView.isOk()) {
+                skuDetailTo.setCategoryView(skuCategoryView.getData());
+            }
+        }, corePool);
+
+        CompletableFuture<Void> SkuTask = CompletableFuture.runAsync(() -> {
+            //2、查Sku信息 照片
+            Result<SkuInfo> skuInfo = productFeignClient.getSkuInfo(skuId);
+            if (skuInfo.isOk()) {
+                skuDetailTo.setSkuInfo(skuInfo.getData());
+            }
+        }, corePool);
+
+        CompletableFuture<Void> PriceTask = CompletableFuture.runAsync(() -> {
+            //3.查询sku价格
+            Result<BigDecimal> skuPrice = productFeignClient.getSkuPrice(skuId);
+            if (skuPrice.isOk()) {
+                skuDetailTo.setPrice(skuPrice.getData());
+            }
+        }, corePool);
+        CompletableFuture<Void> SpuSaleAttrTask = CompletableFuture.runAsync(() -> {
+            //4、查所有销售属性组合
+            Result<List<SpuSaleAttr>> skudeSpuSaleAttrAndValue = productFeignClient.getSkudeSpuSaleAttrAndValue(skuId);
+            if (skudeSpuSaleAttrAndValue.isOk()) {
+                skuDetailTo.setSpuSaleAttrList(skudeSpuSaleAttrAndValue.getData());
+            }
+        }, corePool);
+        CompletableFuture<Void> valueJsonTask = CompletableFuture.runAsync(() -> {
+            //5、查实际sku组合
+            Result<Map<String, String>> skuValueJson = productFeignClient.getSkuValueJson(skuId);
+            if (skuValueJson.isOk()) {
+                Map<String, String> jsonData = skuValueJson.getData();
+                skuDetailTo.setValuesSkuJson(JSONs.toStr(jsonData));
+            }
+        }, corePool);
+
+        //allOf 返回的 CompletableFuture 总任务结束再往下
+        CompletableFuture.allOf(categoryTask, SkuTask, PriceTask, SpuSaleAttrTask, valueJsonTask).join();
+        return skuDetailTo;
+    }
+
+    /**
+     * 增加商品热度
+     *
+     * @param skuId
+     */
+    @Override
+    public void updateHotScore(Long skuId) {
+        //累积到100人以后增加一次热度
+        Double score = stringRedisTemplate.opsForZSet().incrementScore(RedisConst.SKU_HOTSCORE, skuId.toString(), 1.0);
+        if (score % 100 == 0) {
+            //远程调用ES增加商品热度
+            searchFeignClient.updateHotScore(skuId, score.longValue());
+        }
+
+    }
 
     /**
      * 缓存查询SKuDetail
@@ -212,59 +286,6 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         log.info("缓存命中");
         //缓存中有数据
         return cacheData;
-    }
-
-    /**
-     * 从数据库查SKuDetail
-     *
-     * @param skuId
-     * @return
-     */
-    public SkuDetailTo getSkuDetialFromDb(Long skuId) {
-        SkuDetailTo skuDetailTo = new SkuDetailTo();
-        //异步 编排: 编组(管理)+排列组合(运行)
-        CompletableFuture<Void> categoryTask = CompletableFuture.runAsync(() -> {
-            //1、查分类
-            Result<BaseCategoryView> skuCategoryView = productFeignClient.getSkuCategoryView(skuId);
-            if (skuCategoryView.isOk()) {
-                skuDetailTo.setCategoryView(skuCategoryView.getData());
-            }
-        }, corePool);
-
-        CompletableFuture<Void> SkuTask = CompletableFuture.runAsync(() -> {
-            //2、查Sku信息 照片
-            Result<SkuInfo> skuInfo = productFeignClient.getSkuInfo(skuId);
-            if (skuInfo.isOk()) {
-                skuDetailTo.setSkuInfo(skuInfo.getData());
-            }
-        }, corePool);
-
-        CompletableFuture<Void> PriceTask = CompletableFuture.runAsync(() -> {
-            //3.查询sku价格
-            Result<BigDecimal> skuPrice = productFeignClient.getSkuPrice(skuId);
-            if (skuPrice.isOk()) {
-                skuDetailTo.setPrice(skuPrice.getData());
-            }
-        }, corePool);
-        CompletableFuture<Void> SpuSaleAttrTask = CompletableFuture.runAsync(() -> {
-            //4、查所有销售属性组合
-            Result<List<SpuSaleAttr>> skudeSpuSaleAttrAndValue = productFeignClient.getSkudeSpuSaleAttrAndValue(skuId);
-            if (skudeSpuSaleAttrAndValue.isOk()) {
-                skuDetailTo.setSpuSaleAttrList(skudeSpuSaleAttrAndValue.getData());
-            }
-        }, corePool);
-        CompletableFuture<Void> valueJsonTask = CompletableFuture.runAsync(() -> {
-            //5、查实际sku组合
-            Result<Map<String, String>> skuValueJson = productFeignClient.getSkuValueJson(skuId);
-            if (skuValueJson.isOk()) {
-                Map<String, String> jsonData = skuValueJson.getData();
-                skuDetailTo.setValuesSkuJson(JSONs.toStr(jsonData));
-            }
-        }, corePool);
-
-        //allOf 返回的 CompletableFuture 总任务结束再往下
-        CompletableFuture.allOf(categoryTask, SkuTask, PriceTask, SpuSaleAttrTask, valueJsonTask).join();
-        return skuDetailTo;
     }
 
 

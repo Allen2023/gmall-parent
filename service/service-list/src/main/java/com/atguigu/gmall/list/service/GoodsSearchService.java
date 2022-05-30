@@ -1,6 +1,8 @@
 package com.atguigu.gmall.list.service;
 
 import com.atguigu.gmall.model.list.Goods;
+import com.atguigu.gmall.model.list.SearchParam;
+import com.atguigu.gmall.model.vo.GoodsSearchResultVo;
 
 /**
  * @Author: xsz
@@ -19,4 +21,18 @@ public interface GoodsSearchService  {
      * @param skuId
      */
     void deleteGoods(Long skuId);
+
+    /**
+     * 检索商品
+     * @param params
+     * @return
+     */
+    GoodsSearchResultVo searchGoods(SearchParam params);
+
+    /**
+     * 增加商品热度
+     * @param skuId
+     * @param score
+     */
+    void updateHotScore(Long skuId, Long score);
 }

@@ -2,6 +2,8 @@ package com.atguigu.gmall.feign.list;
 
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.list.Goods;
+import com.atguigu.gmall.model.list.SearchParam;
+import com.atguigu.gmall.model.vo.GoodsSearchResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,4 +33,15 @@ public interface SearchFeignClient {
      */
     @GetMapping("/goods/delete/{skuId}")
     Result deleteGoods(@PathVariable("skuId") Long skuId);
+
+    /**
+     * 检索商品
+     * @param params
+     * @return
+     */
+    @PostMapping("/goods/search")
+    Result<GoodsSearchResultVo> searchGoods(@RequestBody SearchParam params);
+
+    @GetMapping("/goods/incrHotScore/{skuId}")
+     Result updateHotScore(@PathVariable("skuId") Long skuId,@RequestParam("hotScore") Long score);
 }
