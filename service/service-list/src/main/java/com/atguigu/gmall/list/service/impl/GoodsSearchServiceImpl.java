@@ -107,7 +107,7 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
         goods.setHotScore(score);
         //保存商品
         goodsDao.save(goods);
-        log.info("商品热度已更新为:"+skuId+":"+score);
+        log.info("商品热度已更新为:" + skuId + ":" + score);
     }
 
 
@@ -273,6 +273,11 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
         List<Goods> goods = Lists.newArrayList();
         for (SearchHit<Goods> hit : searchHits) {
             Goods content = hit.getContent();
+            //如果是模糊查询 则显示高亮
+            if (!StringUtils.isEmpty(params.getKeyword())) {
+                String title = hit.getHighlightField("title").get(0);
+                content.setTitle(title);
+            }
             goods.add(content);
         }
         resultVo.setGoodsList(goods);

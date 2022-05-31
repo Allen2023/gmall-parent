@@ -1,6 +1,5 @@
 package com.atguigu.gmall.list;
 
-import com.atguigu.gmall.common.util.JSONs;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -79,7 +78,7 @@ public class esTest {
 
     //查询字段
     @Test
-    void  testSelect() {
+    void testSelect() {
         //单个查询
         Hello hello = restTemplate.get("id", Hello.class, IndexCoordinates.of("小徐"));
         System.out.println("hello = " + hello);
@@ -96,6 +95,16 @@ public class esTest {
         System.out.println("hitList = " + hitList);
     }
 
+    @org.junit.Test
+    public void IntegerTest() {
+        Integer a = 127;
+        Integer b = 127;
+        Integer c = 128;
+        Integer d = 128;
+        System.out.println(a == b); //true
+        System.out.println(c == d); //false
+
+    }
 
 }
 
