@@ -1,0 +1,42 @@
+spring:
+  shardingsphere:
+    datasource: # 配置真实存在的数据源作为名称
+      names: master1,slave1,slave2 #指定所有数据源的名字
+      master1:
+        type: com.zaxxer.hikari.HikariDataSource #数据源类型
+        url: jdbc:mysql://192.168.253.88:3306/gmall_user?userSSL=false
+        username: root
+        password: root
+        driver-class-name: com.mysql.jdbc.Driver
+
+      slave1:
+        type: com.zaxxer.hikari.HikariDataSource #数据源类型
+        url: jdbc:mysql://192.168.253.88:3307/gmall_user?userSSL=false
+        username: root
+        password: root
+        driver-class-name: com.mysql.jdbc.Driver
+
+      slave2:
+        type: com.zaxxer.hikari.HikariDataSource #数据源类型
+        url: jdbc:mysql://192.168.253.88:3308/gmall_user?userSSL=false
+        username: root
+        password: root
+        driver-class-name: com.mysql.jdbc.Driver
+    rules:
+      #读写分离
+      readwrite-splitting:
+        data-sources:
+          ds_0:
+            type: static
+            props:
+              auto-aware-data-source-name: master1
+              write-data-source-name: master1
+              read-data-source-names: slave1,slave2
+            load-balancer-name: read-random
+        load-balancers:
+          read-random:
+            type: ROUND_ROBIN #轮训负载均衡
+    props:
+      sql-show: true
+      sql-simple: true
+

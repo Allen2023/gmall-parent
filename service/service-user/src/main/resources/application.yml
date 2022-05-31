@@ -1,0 +1,12 @@
+server:
+  port: 11000  #每种微服务用一个整数端口  7000~7100
+
+
+spring:
+  profiles:
+    include: sharding
+  redis:
+    host: 192.168.253.88
+    password: 825119
+
+

@@ -1,6 +1,9 @@
 server:
   port: 80
 spring:
+  redis:
+    host: 192.168.253.88
+    password: 825119
   cloud:
     gateway:
       globalcors:
@@ -21,9 +24,14 @@ spring:
           uri: lb://service-item
           predicates:
             - Path=/redis/incr
+        - id: user_roote
+          uri: lb://service-user
+          predicates:
+            - Path=/api/user/**
 
         - id: web-all
           uri: lb://web-all
           predicates:
             - Host=**.gmall.com,gmall.com
+
 
