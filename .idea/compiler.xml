@@ -14,6 +14,7 @@
         <module name="service-feign-client" />
         <module name="service-product" />
         <module name="service-user" />
+        <module name="service-cart" />
         <module name="service-list" />
         <module name="model" />
         <module name="service-item" />
@@ -33,6 +34,7 @@
       <module name="model" options="-parameters" />
       <module name="server-gateway" options="-parameters" />
       <module name="service" options="-parameters" />
+      <module name="service-cart" options="-parameters" />
       <module name="service-feign-client" options="-parameters" />
       <module name="service-item" options="-parameters" />
       <module name="service-list" options="-parameters" />

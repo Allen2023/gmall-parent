@@ -6,3 +6,12 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 1000
+        readTimeout: 5000
+        retryer: org.springframework.cloud.sleuth.instrument.web.client.feign.NeverRetry
+
+

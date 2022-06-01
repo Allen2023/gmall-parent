@@ -30,16 +30,21 @@ public class UserController {
 
     @PostMapping("/passport/login")
     public Result login(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+        // 浏览器 -- nginx -- 网关 -- 微服务
+        //设置Ip登录
         String ipAddress = IpUtil.getIpAddress(request);
         userInfo.setIpAddr(ipAddress);
+
+        //用户登录
         LoginUserResponseVo responseVo = userInfoService.login(userInfo);
-        if (responseVo == null) {
-            //登陆失败
+        if(responseVo == null){
+            //没有登录成功
             return Result.build("", ResultCodeEnum.LOGIN_ERROR);
         }
         return Result.ok(responseVo);
     }
 
+    //http://api.gmall.com/api/user/passport/logout
 
     @GetMapping("/passport/logout")
     public Result logOut(@RequestHeader("token") String token) {

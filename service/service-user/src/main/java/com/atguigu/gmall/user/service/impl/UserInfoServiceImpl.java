@@ -32,25 +32,28 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public LoginUserResponseVo login(UserInfo userInfo) {
+        //{"loginName":"aaaa","passwd":"dddd"}
+        //select * from user_info where login_name='admin' and passwd='111加密后的'
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("login_name",userInfo.getLoginName());
         queryWrapper.eq("passwd", MD5.encrypt(userInfo.getPasswd()));
+
+        //成功的用户完整数据
         UserInfo loginUser = userInfoMapper.selectOne(queryWrapper);
-        if (loginUser == null) {
-            //登陆失败
-            //账号密码错误
+        if(loginUser == null){
+            //前端带的账号密码是错误的
             return null;
         }
-        //登录成功 创建值对象 保存token 和 nickName
-        LoginUserResponseVo responseVo = new LoginUserResponseVo();
-        //复制Ip地址保存到对象
-        loginUser.setIpAddr(userInfo.getIpAddr());
-        //将查询到的User保存到Redis
+        //用户登录成功
+        LoginUserResponseVo loginUserResponseVo = new LoginUserResponseVo();
+        //去redis保存登陆成功的用户的认证信息
+        loginUser.setIpAddr(userInfo.getIpAddr()); //Ip复制过来
         String token = saveAuthentication(loginUser);
-        responseVo.setToken(token);
-        responseVo.setNickName(loginUser.getNickName());
-
-        return responseVo;
+        //设置令牌
+        loginUserResponseVo.setToken(token);
+        //设置昵称
+        loginUserResponseVo.setNickName(loginUser.getNickName());
+        return loginUserResponseVo;
     }
 
     /**
@@ -59,9 +62,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
      * @param loginUser
      * @return
      */
-    private String saveAuthentication(UserInfo loginUser) {
+    private String saveAuthentication(UserInfo userInfo) {
         String token = UUID.randomUUID().toString().replace("-", "");
-        redisTemplate.opsForValue().set(RedisConst.USER_LOGIN_PREFIX + token, JSONs.toStr(loginUser), 7, TimeUnit.DAYS);
+        // user:login:token = {用户数据}
+        //redis按照token与用户的对应关系保存令牌
+        redisTemplate.opsForValue().set(RedisConst.USER_LOGIN_PREFIX+token, JSONs.toStr(userInfo),7, TimeUnit.DAYS);
         return token;
     }
 
