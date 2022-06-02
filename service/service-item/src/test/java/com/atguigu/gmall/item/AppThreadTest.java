@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * 2、CompletableFuture 给线程池中提交任务
  * 3、对提交的任务进行编排、组合、容错处理
  */
-@SpringBootTest //这是一个SpringBoot测试
+//@SpringBootTest //这是一个SpringBoot测试
 public class AppThreadTest {
     @Qualifier("corePool")
     @Autowired()

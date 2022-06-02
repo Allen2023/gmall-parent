@@ -1,21 +1,15 @@
 package com.atguigu.gmall.product;
 
-import com.atguigu.gmall.model.product.BaseSaleAttr;
 import com.atguigu.gmall.model.product.BaseTrademark;
-import com.atguigu.gmall.product.mapper.BaseSaleAttrMapper;
 import com.atguigu.gmall.product.mapper.BaseTrademarkMapper;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 /**
  * @Author: xsz
  * @Description: TODO
  * @DateTime: 2022/5/27 18:16
  */
-@SpringBootTest
+//@SpringBootTest
 public class Testone {
 
 
@@ -25,7 +19,7 @@ public class Testone {
     @Autowired
     BaseTrademarkMapper mapper;
 
-    @Test
+    //@Test
     public void Test1() {
         BaseTrademark baseTrademark = mapper.selectById(12L);
         System.out.println("baseTrademark = " + baseTrademark);

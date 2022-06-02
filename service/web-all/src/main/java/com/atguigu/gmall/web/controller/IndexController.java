@@ -24,7 +24,7 @@ public class IndexController {
     ProductFeignClient productFeignClient;
 
     //    classpath:/templates/index.html
-    @GetMapping({"/","/index.com"})
+    @GetMapping({"/","/index.html"})
     public String indexPage(Model model) {
 //        log.info("首页");
         Result<List<CategoryAndChildTo>> result = productFeignClient.getAllCategoryWithChilds();

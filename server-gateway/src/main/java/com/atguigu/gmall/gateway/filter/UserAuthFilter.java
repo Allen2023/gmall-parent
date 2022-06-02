@@ -106,13 +106,24 @@ public class UserAuthFilter implements GlobalFilter {
             }
         }
 
-        //4.正常请求
+        //4.正常请求 如果登录需要透传UserId
         String token = getToken(request);
         if (StringUtils.isEmpty(token)) {
+            //有可能带了 userTempId  透传临时id
+            String userTempId = getUserTempId(request);
+            //透传 克隆一个请求放入exchange
+            ServerHttpRequest newRequest = exchange.getRequest()
+                    .mutate()
+                    .header("UserTempId", userTempId)
+                    .build();
+            //从原exchange克隆一个新的exchange放克隆的请求
+            ServerWebExchange cloneExchange = exchange.mutate()
+                    .request(newRequest)
+                    .response(exchange.getResponse())
+                    .build();
             //没带token,直接响应
-            return chain.filter(exchange);
-        } else
-        {
+            return chain.filter(cloneExchange);
+        } else {
             //带了token 检验token是否和redis里的是否一致
             boolean validate = validateToken(request);
             if (!validate) {
@@ -122,9 +133,12 @@ public class UserAuthFilter implements GlobalFilter {
                 //token正确 用户id穿透服务
                 ServerHttpRequest originRequest = exchange.getRequest();
                 UserInfo userInfo = getTokenRedisValue(token, IpUtil.getGatwayIpAddress(originRequest));
+                //带了userTempId 获取临时id  透传临时id
+                String userTempId = getUserTempId(request);
                 //从原请求克隆一个新的请求
                 ServerHttpRequest cloneRequest = exchange.getRequest().mutate()
                         .header("UserId", userInfo.getId().toString())
+                        .header("UserTempId", userTempId)
                         .build();
 
                 //从原exchange克隆一个新的exchange放克隆的请求
@@ -136,6 +150,24 @@ public class UserAuthFilter implements GlobalFilter {
                 return chain.filter(cloneExchange);
             }
         }
+    }
+
+    /**
+     * 获取用户临时Id
+     *
+     * @param request
+     * @return
+     */
+    private String getUserTempId(ServerHttpRequest request) {
+        String userTempId = "";
+        HttpCookie cookie = request.getCookies().getFirst("userTempId");
+        if (cookie != null) {
+            userTempId = cookie.getValue();
+        } else {
+            String headValue = request.getHeaders().getFirst("userTempId");
+            userTempId = headValue;
+        }
+        return userTempId;
     }
 
     /**
@@ -178,9 +210,9 @@ public class UserAuthFilter implements GlobalFilter {
         String token = "";
         HttpCookie cookie = request.getCookies().getFirst("token");
         //有这个cookie，说明前端把token放到的cookie位置，给我们带来了
-        if(cookie!=null){
+        if (cookie != null) {
             token = cookie.getValue();
-        }else {
+        } else {
             //前端没有放在cookie位置
             String headerToken = request.getHeaders().getFirst("token");
             token = headerToken;
@@ -203,23 +235,23 @@ public class UserAuthFilter implements GlobalFilter {
 
         HttpCookie cookie = request.getCookies().getFirst("token");
         //有这个cookie，说明前端把token放到的cookie位置，给我们带来了
-        if(cookie!=null){
+        if (cookie != null) {
             token = cookie.getValue();
-        }else {
+        } else {
             //前端没有放在cookie位置
             String headerToken = request.getHeaders().getFirst("token");
             token = headerToken;
         }
 
-        if(StringUtils.isEmpty(token)){
+        if (StringUtils.isEmpty(token)) {
             //前端没有带token
             return false;
-        }else {
+        } else {
             //前端带了 token；校验一下
             //  user:login:token 查询下redis中真正的值
             String ipAddress = IpUtil.getGatwayIpAddress(request);
             UserInfo loginUser = getTokenRedisValue(token, ipAddress);
-            if(loginUser == null){
+            if (loginUser == null) {
                 //用户没登录或者假登录
                 return false;
             }
